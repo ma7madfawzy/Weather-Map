@@ -18,19 +18,3 @@ inline fun Activity.alertDialog(body: AlertDialog.Builder.() -> AlertDialog.Buil
         .body()
         .show()
 }
-fun Activity.startActivity(viewToAnimate: View, cls: Class<*>, extras: Bundle) {
-    val intent = Intent(this, cls)
-    intent.putExtras(extras)
-    val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-        this, viewToAnimate, this.getString(R.string.transition)
-    )
-    ActivityCompat.startActivity(this, intent, options.toBundle())
-}
-
-fun Activity.startActivity(cls: Class<*>, extras: Bundle, finish: Boolean = false) {
-    val intent = Intent(this, cls)
-    intent.putExtras(extras)
-    this.startActivity(intent)
-    if (finish)
-        this.finish()
-}

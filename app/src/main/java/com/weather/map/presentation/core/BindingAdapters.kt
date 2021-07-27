@@ -56,26 +56,6 @@ fun setWeatherIcon(view: ImageView, iconPath: String?) {
     view.setImageDrawable(imageDrawable)
 }
 
-@BindingAdapter("app:setErrorView")
-fun setErrorView(view: View, viewState: BaseViewState?) {
-    if (viewState?.shouldShowErrorMessage() == true) {
-        view.show()
-    } else {
-        view.hide()
-    }
-
-    view.setOnClickListener { view.hide() }
-}
-
-@BindingAdapter("app:setErrorText")
-fun setErrorText(view: TextView, viewState: BaseViewState?) {
-    if (viewState?.shouldShowErrorMessage() == true) {
-        view.text = viewState.getErrorMessage()
-    } else {
-        view.text = view.context.getString(R.string.smth_went_wrong)
-    }
-}
-
 @BindingAdapter("error")
 fun error(view: View, error: Int) {
     if (error == 0) return
@@ -91,7 +71,7 @@ fun error(view: View, error: Int) {
 
 @BindingAdapter("error")
 fun error(view: TextInputLayout, error: Int) {
-    if (error == 0||(view.tag != null && view.tag is TextWatcher)) return
+    if (error == 0 || (view.tag != null && view.tag is TextWatcher)) return
     view.isErrorEnabled = true
     view.error = view.context.getString(error)
     view.editText?.let {
