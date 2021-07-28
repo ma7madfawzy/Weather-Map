@@ -28,13 +28,13 @@ class CurrentLatLngRepositoryImpl @Inject constructor(private val dataStore: Dat
     override suspend fun getLatLng() = dataStore.data.catch {
         getPreferences(it)
     }.map {
-        val latlng = it[PreferencesKeys.LAT_LNG_KEY]
-         if (latlng != null) {
-            val latLngSplit = latlng.split(":")
+        val latLng = it[PreferencesKeys.LAT_LNG_KEY]
+         if (latLng != null) {
+            val latLngSplit = latLng.split(":")
             LatLng(latLngSplit[0].toDouble(), latLngSplit[1].toDouble())
         } else LatLng(
             Constants.DataStore.DEFAULT_LAT,
-            Constants.DataStore.DEFAULT_LAT
+            Constants.DataStore.DEFAULT_LONG
         )
     }
 

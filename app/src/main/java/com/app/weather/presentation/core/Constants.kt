@@ -16,8 +16,8 @@ object Constants {
 
     object DataStore {
         const val USER_PREFERENCES_NAME = "DataStore"
-        const val DEFAULT_LAT: Double = 51.5074//London lat
-        const val DEFAULT_LONG: Double = 0.1278//London long
+        const val DEFAULT_LAT: Double = 51.5073//London lat
+        const val DEFAULT_LONG: Double = -0.127647//London long
     }
 
     object AlgoliaKeys {
