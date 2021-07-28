@@ -4,20 +4,16 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.weather.R
 import com.app.weather.data.db.entity.CitiesForSearchEntity
 import com.app.weather.databinding.FragmentSearchBinding
-import com.app.weather.domain.usecase.SearchCitiesUseCase
-import com.app.weather.presentation.core.BaseFragment
 import com.app.weather.presentation.core.BaseVmFragment
 import com.app.weather.presentation.main.MainActivity
 import com.app.weather.presentation.search.result.SearchResultAdapter
 import com.app.weather.utils.extensions.hideKeyboard
 import com.app.weather.utils.extensions.observeWith
-import com.app.weather.utils.extensions.tryCatch
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,13 +21,15 @@ class SearchFragment : BaseVmFragment<SearchViewModel, FragmentSearchBinding>(
     R.layout.fragment_search,
     SearchViewModel::class.java,
 ) {
-
     override fun init() {
         super.init()
         initSearchResultsAdapter()
         initSearchView()
+        observeSearchViewStateData()
+    }
 
-        binding.viewModel?.getSearchViewState()?.observeWith(
+    private fun observeSearchViewStateData() {
+        binding.viewModel?.viewState?.observeWith(
             viewLifecycleOwner
         ) {
             binding.viewState = it

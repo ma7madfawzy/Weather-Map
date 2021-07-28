@@ -2,11 +2,10 @@ package com.app.weather.domain.usecase
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.app.weather.presentation.core.Constants
 import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.domain.repositories.CurrentWeatherRepository
-import com.app.weather.presentation.dashboard.CurrentWeatherViewState
-import com.app.weather.utils.UseCaseLiveData
+import com.app.weather.presentation.core.BaseViewState
+import com.app.weather.presentation.core.Constants
 import com.app.weather.utils.domain.Resource
 import javax.inject.Inject
 
@@ -16,10 +15,10 @@ import javax.inject.Inject
 
 class CurrentWeatherUseCase @Inject internal constructor(
     private val repository: CurrentWeatherRepository
-)  {
+) {
 
 
-    operator fun invoke(params: CurrentWeatherParams?): LiveData<CurrentWeatherViewState> {
+    operator fun invoke(params: CurrentWeatherParams?): LiveData<BaseViewState<CurrentWeatherEntity>> {
         return repository.loadCurrentWeatherByGeoCords(
             params?.lat?.toDouble() ?: 0.0,
             params?.lon?.toDouble() ?: 0.0,
@@ -31,13 +30,10 @@ class CurrentWeatherUseCase @Inject internal constructor(
         }
     }
 
-    private fun onCurrentWeatherResultReady(resource: Resource<CurrentWeatherEntity>): CurrentWeatherViewState {
-        return CurrentWeatherViewState(
-            status = resource.status,
-            error = resource.message,
-            data = resource.data
-        )
+    private fun onCurrentWeatherResultReady(resource: Resource<CurrentWeatherEntity>): BaseViewState<CurrentWeatherEntity> {
+        return BaseViewState(resource)
     }
+
 
     class CurrentWeatherParams(
         val lat: String = "",

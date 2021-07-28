@@ -10,6 +10,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.weather.R
+import com.app.weather.data.db.entity.ForecastEntity
 import com.app.weather.utils.extensions.hide
 import com.app.weather.utils.extensions.show
 import com.squareup.picasso.Picasso
@@ -43,26 +44,6 @@ fun setWeatherIcon(view: ImageView, iconPath: String?) {
         view.context.resources.getIdentifier(newPath + "_svg", "drawable", view.context.packageName)
     val imageDrawable = ResourcesCompat.getDrawable(view.context.resources, imageid, null)
     view.setImageDrawable(imageDrawable)
-}
-
-@BindingAdapter("setErrorView")
-fun setErrorView(view: View, viewState: BaseViewState?) {
-    if (viewState?.shouldShowErrorMessage() == true) {
-        view.show()
-    } else {
-        view.hide()
-    }
-
-    view.setOnClickListener { view.hide() }
-}
-
-@BindingAdapter("setErrorText")
-fun setErrorText(view: TextView, viewState: BaseViewState?) {
-    if (viewState?.shouldShowErrorMessage() == true) {
-        view.text = viewState.getErrorMessage()
-    } else {
-        view.text = view.context.getString(R.string.unexpected_exception)
-    }
 }
 
 @BindingAdapter("setDisplayHomeAsUpEnabled")

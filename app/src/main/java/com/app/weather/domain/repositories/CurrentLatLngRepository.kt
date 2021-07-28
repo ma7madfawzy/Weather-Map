@@ -8,5 +8,5 @@ interface CurrentLatLngRepository {
 
     suspend fun getLatLng(): Flow<LatLng>
 
-    suspend fun setLatLng(lat:String)
+    suspend fun setLatLng(latLng:String)
 }

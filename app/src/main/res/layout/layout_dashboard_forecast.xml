@@ -6,10 +6,9 @@
     <data>
 
         <import type="android.view.View" />
-
         <variable
             name="viewState"
-            type="com.app.weather.presentation.dashboard.CurrentWeatherViewState" />
+            type="com.app.weather.presentation.core.BaseViewState&lt;com.app.weather.data.db.entity.CurrentWeatherEntity&gt;" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

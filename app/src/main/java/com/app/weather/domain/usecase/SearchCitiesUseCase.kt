@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.app.weather.data.db.entity.CitiesForSearchEntity
 import com.app.weather.domain.repositories.SearchCitiesRepository
-import com.app.weather.presentation.search.SearchViewState
+import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.utils.domain.Resource
 import javax.inject.Inject
 
@@ -14,17 +14,16 @@ import javax.inject.Inject
 
 class SearchCitiesUseCase @Inject internal constructor(private val repository: SearchCitiesRepository) {
 
-    operator fun invoke(cityName: String?): LiveData<SearchViewState> {
+    operator fun invoke(cityName: String?): LiveData<BaseViewState<List<CitiesForSearchEntity>>> {
         return repository.loadCitiesByCityName(cityName ?: "")
             .map { onSearchResultReady(it) }
     }
 
-    private fun onSearchResultReady(resource: Resource<List<CitiesForSearchEntity>>): SearchViewState {
-        return SearchViewState(
-            status = resource.status,
-            error = resource.message,
-            data = resource.data
+    private fun onSearchResultReady(resource: Resource<List<CitiesForSearchEntity>>) =
+        BaseViewState(
+            resource.status,
+            resource.message,
+            resource.data
         )
-    }
 
 }

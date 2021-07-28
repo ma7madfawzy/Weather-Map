@@ -3,10 +3,13 @@ package com.app.weather.presentation.dashboard
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
+import com.app.weather.data.db.entity.CurrentWeatherEntity
+import com.app.weather.data.db.entity.ForecastEntity
 import com.app.weather.domain.usecase.CurrentWeatherUseCase
 import com.app.weather.domain.usecase.ForecastUseCase
 import com.app.weather.domain.usecase.GetCurrentLatLngUseCase
 import com.app.weather.presentation.core.BaseViewModel
+import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.BaseVmFragment
 import com.app.weather.presentation.core.Constants
 import com.google.android.gms.maps.model.LatLng
@@ -34,11 +37,11 @@ class DashboardFragmentViewModel @Inject internal constructor(
     private val currentWeatherParams: MutableLiveData<CurrentWeatherUseCase.CurrentWeatherParams> =
         MutableLiveData()
 
-    val forecastViewState: LiveData<ForecastViewState> =
+    val forecastViewState: LiveData<BaseViewState<ForecastEntity>> =
         forecastParams.switchMap { params ->
             forecastUseCase(params)
         }
-    val currentWeatherViewState: LiveData<CurrentWeatherViewState> =
+    val currentWeatherViewState: LiveData<BaseViewState<CurrentWeatherEntity>> =
         currentWeatherParams.switchMap { params ->
             currentWeatherUseCase(params)
         }

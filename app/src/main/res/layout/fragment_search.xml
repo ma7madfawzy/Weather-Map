@@ -11,7 +11,7 @@
 
         <variable
             name="viewState"
-            type="com.app.weather.presentation.search.SearchViewState" />
+            type="com.app.weather.presentation.core.BaseViewState" />
 
     </data>
 
@@ -68,7 +68,7 @@
                 android:backgroundTint="@android:color/holo_red_light"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="16dp"
-                app:setErrorView="@{viewState}"
+                app:visibility="@{viewState.shouldShowErrorMessage()}"
                 app:strokeColor="@android:color/holo_red_dark"
                 app:strokeWidth="2dp">
 
@@ -83,7 +83,7 @@
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     app:drawableEndCompat="@android:drawable/stat_notify_error"
-                    app:setErrorText="@{viewState}"
+                    android:text="@{viewState.shouldShowErrorMessage()?viewState.errorMessage:@string/unexpected_exception}"
                     tools:text="Status code : 500 Internal server error!" />
 
             </com.google.android.material.card.MaterialCardView>

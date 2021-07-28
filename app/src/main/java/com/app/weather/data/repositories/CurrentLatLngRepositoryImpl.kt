@@ -38,9 +38,9 @@ class CurrentLatLngRepositoryImpl @Inject constructor(private val dataStore: Dat
         )
     }
 
-    override suspend fun setLatLng(latlng: String) {
+    override suspend fun setLatLng(latLng: String) {
         dataStore.edit {
-            it[PreferencesKeys.LAT_LNG_KEY] = latlng
+            it[PreferencesKeys.LAT_LNG_KEY] = latLng
         }
     }
 
