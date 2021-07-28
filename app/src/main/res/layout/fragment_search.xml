@@ -36,6 +36,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                app:setIsSearchViewActivated="@{true}"
+                app:setIconifiedByDefault="@{false}"
+                app:searchViewEditTextColor="@{@color/mainTextColor}"
+                app:searchViewEditHintColor="@{@android:color/darker_gray}"
                 app:defaultQueryHint="@string/start_typing" />
 
         </com.google.android.material.card.MaterialCardView>

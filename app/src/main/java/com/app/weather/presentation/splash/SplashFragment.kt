@@ -19,14 +19,10 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_spl
     private fun initAnimationHandler() {
         animationHandler = AnimationHandler(binding)
         startSplashAnimation()
-
-        binding.buttonExplore.setOnClickListener {
-            endSplashAnimation()
-        }
     }
 
     private fun startSplashAnimation() {
-        animationHandler.startSplashAnimation()
+        animationHandler.startSplashAnimation { endSplashAnimation() }
     }
 
     private fun endSplashAnimation() {

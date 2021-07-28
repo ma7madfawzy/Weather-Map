@@ -38,13 +38,10 @@ class DashboardFragmentViewModel @Inject internal constructor(
         MutableLiveData()
 
     val forecastViewState: LiveData<BaseViewState<ForecastEntity>> =
-        forecastParams.switchMap { params ->
-            forecastUseCase(params)
-        }
+        forecastParams.switchMap { forecastUseCase(it) }
+
     val currentWeatherViewState: LiveData<BaseViewState<CurrentWeatherEntity>> =
-        currentWeatherParams.switchMap { params ->
-            currentWeatherUseCase(params)
-        }
+        currentWeatherParams.switchMap { currentWeatherUseCase(it) }
 
     init {
         CoroutineScope(Dispatchers.IO).launch {

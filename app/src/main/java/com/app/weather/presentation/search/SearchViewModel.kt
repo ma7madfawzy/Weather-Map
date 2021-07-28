@@ -34,20 +34,20 @@ class SearchViewModel @Inject internal constructor(
             useCase(params)
         }
 
-    fun setSearchParams(cityName: String?) {
-        if (cityNameData.value == cityName) {
+    fun onTextChange(text: String?) {
+        if (cityNameData.value == text) {
             return
         }
-        cityNameData.postValue(cityName)
+        cityNameData.postValue(text)
     }
 
     @ExperimentalCoroutinesApi
-    fun saveCoordsToSharedPref(coordEntity: CoordEntity) {
+    fun saveCoordinates(coordinateEntity: CoordEntity) {
         CoroutineScope(Dispatchers.IO).launch {
             setCurrentLatLngUseCase(
                 LatLng(
-                    coordEntity.lat?.toDouble() ?: 0.0,
-                    coordEntity.lon?.toDouble() ?: 0.0
+                    coordinateEntity.lat ?: 0.0,
+                    coordinateEntity.lon ?: 0.0
                 )
             )
         }

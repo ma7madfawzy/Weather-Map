@@ -12,7 +12,7 @@ import com.app.weather.domain.model.ListItem
  * Created by Fawzy
  */
 
-class WeatherHourOfDayAdapter(private val callBack: (ListItem) -> Unit) : BaseAdapter<ListItem>(
+class WeatherHourOfDayAdapter(private val callBack: (ListItem) -> Unit?={}) : BaseAdapter<ListItem>(
     diffCallback
 ) {
 

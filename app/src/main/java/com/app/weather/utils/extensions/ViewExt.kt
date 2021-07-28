@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.annotation.LayoutRes
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.textfield.TextInputLayout
@@ -57,12 +58,35 @@ fun View.show() {
 }
 
 fun View.showKeyboard(activity: Activity) {
-    val inputManager: InputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputManager: InputMethodManager =
+        activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 }
 
 fun View.hideKeyboard(activity: Activity) {
     val view = activity.findViewById<View>(android.R.id.content)
-    val inputManager: InputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputManager: InputMethodManager =
+        activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+inline fun SearchView.queryTextListener(
+    crossinline onQueryTextSubmit: (newText: String) -> Unit,
+    crossinline onQueryTextChange: (newText: String) -> Unit
+) {
+    object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(newText: String): Boolean {
+            if (newText.isNotEmpty() && newText.count() > 2) {
+                onQueryTextSubmit(newText)
+            }
+            return false
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            if (newText?.isNotEmpty() == true && newText.count() > 2) {
+                onQueryTextChange(newText)
+            }
+            return true
+        }
+    }
 }

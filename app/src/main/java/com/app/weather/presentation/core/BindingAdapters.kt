@@ -1,16 +1,17 @@
 package com.app.weather.presentation.core
 
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.weather.R
-import com.app.weather.data.db.entity.ForecastEntity
 import com.app.weather.utils.extensions.hide
 import com.app.weather.utils.extensions.show
 import com.squareup.picasso.Picasso
@@ -58,16 +59,37 @@ fun setNavigationIconTint(toolbar: Toolbar, color: Int) {
 }
 
 @BindingAdapter("setNavigationIcon")
-fun setNavigationIcon(toolbar: Toolbar, drawable: Int?) {
+fun setNavigationIcon(toolbar: Toolbar, @DrawableRes drawable: Int?) {
     toolbar.setNavigationIcon(drawable ?: 0)
 }
+
 @BindingAdapter("setLayoutManager")
 fun setLayoutManager(recyclerView: RecyclerView, orientation: Int) {
     recyclerView.layoutManager = LinearLayoutManager(
         recyclerView.context,
-       orientation ,
+        orientation,
         false
     )
+}
+
+@BindingAdapter("searchViewEditTextColor")
+fun searchViewEditTextColor(view: SearchView, color: Int) {
+    val searchEditText: EditText = view.findViewById(R.id.search_src_text)
+    view.context?.let { searchEditText.setTextColor(color) }
+}
+@BindingAdapter("searchViewEditHintColor")
+fun searchViewEditHintColor(view: SearchView, color: Int) {
+    val searchEditText: EditText = view.findViewById(R.id.search_src_text)
+    view.context?.let { searchEditText.setHintTextColor(color) }
+}
+@BindingAdapter("setIconifiedByDefault")
+fun setIconifiedByDefault(view: SearchView, value: Boolean) {
+    view.setIconifiedByDefault(value)
+    view.isIconified = value
+}
+@BindingAdapter("setIsSearchViewActivated")
+fun setIsSearchViewActivated(view: SearchView, value: Boolean) {
+    view.isActivated = value
 }
 
 /**

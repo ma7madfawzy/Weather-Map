@@ -10,7 +10,7 @@ import io.reactivex.rxkotlin.addTo
 class AnimationHandler(private val binding: FragmentSplashBinding) {
     private var disposable = CompositeDisposable()
 
-    fun startSplashAnimation() =
+    fun startSplashAnimation(onTerminateAction: Action) =
         RxAnimation.sequentially(
             RxAnimation.together(
                 binding.imageViewBottomDrawable.translationY(500f),
@@ -20,7 +20,6 @@ class AnimationHandler(private val binding: FragmentSplashBinding) {
                 binding.imageViewSmallCloud.translationX(500f, 0L),
                 binding.imageViewBottomDrawableShadow.translationY(500f),
                 binding.imageViewMainCloud.fadeOut(0L),
-                binding.buttonExplore.fadeOut(0L),
                 binding.imageViewBottomDrawableShadow.fadeOut(0L)
             ),
 
@@ -42,8 +41,7 @@ class AnimationHandler(private val binding: FragmentSplashBinding) {
             ),
 
             binding.imageViewMainCloud.fadeIn(500L),
-            binding.buttonExplore.fadeIn(1000L)
-        ).subscribe().addTo(disposable)
+        ).doOnTerminate(onTerminateAction).subscribe().addTo(disposable)
 
     fun endSplashAnimation(onTerminateAction: Action) =
         RxAnimation.sequentially(
@@ -65,7 +63,6 @@ class AnimationHandler(private val binding: FragmentSplashBinding) {
             ),
 
             binding.imageViewMainCloud.fadeOut(300L),
-            binding.buttonExplore.fadeOut(300L),
             binding.rootView.backgroundColor(
                 Color.parseColor("#5D50FE"),
                 Color.parseColor("#FFFFFF"),

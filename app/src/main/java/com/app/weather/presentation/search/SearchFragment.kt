@@ -1,9 +1,6 @@
 package com.app.weather.presentation.search
 
-import android.widget.EditText
 import android.widget.ImageView
-import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.weather.R
@@ -14,6 +11,7 @@ import com.app.weather.presentation.main.MainActivity
 import com.app.weather.presentation.search.result.SearchResultAdapter
 import com.app.weather.utils.extensions.hideKeyboard
 import com.app.weather.utils.extensions.observeWith
+import com.app.weather.utils.extensions.queryTextListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,46 +36,17 @@ class SearchFragment : BaseVmFragment<SearchViewModel, FragmentSearchBinding>(
     }
 
     private fun initSearchView() {
-        val searchEditText: EditText = binding.searchView.findViewById(R.id.search_src_text)
-        activity?.applicationContext?.let { ContextCompat.getColor(it, R.color.mainTextColor) }
-            ?.let { searchEditText.setTextColor(it) }
-        activity?.applicationContext?.let {
-            ContextCompat.getColor(
-                it,
-                android.R.color.darker_gray
-            )
-        }
-            ?.let { searchEditText.setHintTextColor(it) }
-        binding.searchView.isActivated = true
-        binding.searchView.setIconifiedByDefault(false)
-        binding.searchView.isIconified = false
-
         val searchViewSearchIcon = binding.searchView.findViewById<ImageView>(R.id.search_mag_icon)
         searchViewSearchIcon.setImageResource(R.drawable.ic_search)
 
-        binding.searchView.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(newText: String): Boolean {
-                    if (newText.isNotEmpty() && newText.count() > 2) {
-                        binding.viewModel?.setSearchParams(newText)
-                    }
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText?.isNotEmpty() == true && newText.count() > 2) {
-                        binding.viewModel?.setSearchParams(newText)
-                    }
-                    return true
-                }
-            }
-        )
+        binding.searchView.queryTextListener({ binding.viewModel?.onTextChange(it) },
+            { binding.viewModel?.onTextChange(it) })
     }
 
     private fun initSearchResultsAdapter() {
         val adapter = SearchResultAdapter { item ->
             item.coord?.let {
-                binding.viewModel?.saveCoordsToSharedPref(it)
+                binding.viewModel?.saveCoordinates(it)
                 binding.searchView.hideKeyboard((activity as MainActivity))
                 findNavController().navigate(R.id.action_searchFragment_to_dashboardFragment)
             }

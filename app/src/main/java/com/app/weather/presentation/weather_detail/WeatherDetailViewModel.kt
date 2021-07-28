@@ -2,6 +2,7 @@ package com.app.weather.presentation.weather_detail
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.app.weather.presentation.core.BaseViewModel
 import com.app.weather.data.db.entity.ForecastEntity
@@ -20,13 +21,16 @@ class WeatherDetailViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var weatherItem: ObservableField<ListItem> = ObservableField()
-    private var forecastLiveData: LiveData<ForecastEntity> = MutableLiveData()
     var selectedDayDate: String? = null
-    var selectedDayForecastLiveData: MutableLiveData<List<ListItem>> = MutableLiveData()
-
-    fun getForecastLiveData() = forecastLiveData
-
-    fun getForecast(): LiveData<ForecastEntity> {
-        return forecastLocalDataSource.getForecast()
+    var selectedDayForecastLiveData: MediatorLiveData<List<ListItem>> = MediatorLiveData()
+    init {
+        val dataSource=forecastLocalDataSource.getForecast()
+        selectedDayForecastLiveData.addSource(dataSource) {
+            selectedDayForecastLiveData.removeSource(selectedDayForecastLiveData)
+            selectedDayForecastLiveData.postValue(it.list?.filter { item ->
+                item.dtTxt?.substringBefore(" ") == selectedDayDate
+            })
+        }
     }
+
 }
