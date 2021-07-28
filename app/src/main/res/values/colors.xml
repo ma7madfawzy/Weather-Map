@@ -1,27 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary brand color. -->
-    <color name="colorPrimary">@color/blueLight</color>
-    <color name="colorPrimaryVariant">@color/blueDark</color>
-    <color name="colorOnPrimary">@color/grey_light</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 
-    <!-- Secondary brand color. -->
-    <color name="colorSecondary">@color/blueLight</color>
-    <color name="colorSecondaryVariant">@color/blueDark</color>
-    <color name="colorOnSecondary">@color/grey_dark</color>
-
-    <!-- Main colors  -->
-    <color name="white">#ffffff</color>
-
-    <color name="blueLight">#FF6200EE</color>
-    <color name="blueDark">#FF3700B3</color>
-
-    <color name="grey_dark">#373737</color>
-    <color name="grey_little_dark">#505050</color>
-    <color name="grey">#858585</color>
-    <color name="grey_light">#E3E3E3</color>
-
-    <color name="card_color">@color/white</color>
-    <color name="transparent">#00000000</color>
-    <color name="semi_transparent">#1F000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="whiteWithOpacity">#33FFFFFF</color>
+    <color name="whiteWithHalfOpacity">#80FFFFFF</color>
+    <color name="mainTextColor">#130E51</color>
+    <color name="chipItemBackgroundColor">#1AADA7FE</color>
+    <color name="chipTextColor">#5D50FE</color>
+    <color name="transparent">#1AADA7FE</color>
 </resources>

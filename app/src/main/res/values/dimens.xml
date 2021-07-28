@@ -1,23 +1,7 @@
-<resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-
-    <dimen name="xSmall">6dp</dimen>
-    <dimen name="medium">8dp</dimen>
-    <dimen name="large">12dp</dimen>
-    <dimen name="xxLarge">18dp</dimen>
-    <dimen name="xxxLarge">24dp</dimen>
-
-    <dimen name="app_bar_height">220dp</dimen>
-
-    <!--    it must be more than to leave space-->
-
-    <dimen name="contact_row_card_padding">@dimen/medium</dimen>
-
-    <dimen name="overlap">35dp</dimen>
-    <dimen name="margin_overlap">-20dp</dimen>
-
-    <dimen name="news_image_short_height">150dp</dimen>
-    <dimen name="news_image_long_height">450dp</dimen>
-    <dimen name="default_corner_radius">8dp</dimen>
-    <dimen name="progressWidth">30dp</dimen>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">56dp</dimen>
 </resources>
