@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.app.weather.presentation.dashboard.DashboardFragmentViewModel" />
+            type="com.app.weather.presentation.home.HomeFragmentViewModel" />
 
         <variable
             name="currentWeatherViewState"

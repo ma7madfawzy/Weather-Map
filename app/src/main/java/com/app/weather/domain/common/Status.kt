@@ -1,4 +1,4 @@
-package com.app.weather.utils.domain
+package com.app.weather.domain.common
 
 /**
  * Created by Fawzy

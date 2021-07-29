@@ -6,10 +6,10 @@ import com.app.weather.data.datasource.forecast.ForecastRemoteDataSource
 import com.app.weather.data.db.entity.ForecastEntity
 import com.app.weather.domain.model.ForecastResponse
 import com.app.weather.domain.repositories.ForecastRepository
-import com.app.weather.domain.repositories.NetworkBoundResource
+import com.app.weather.domain.commmon.NetworkBoundResource
 import com.app.weather.presentation.core.Constants.NetworkService.RATE_LIMITER_TYPE
-import com.app.weather.utils.domain.RateLimiter
-import com.app.weather.utils.domain.Resource
+import com.app.weather.domain.common.RateLimiter
+import com.app.weather.domain.common.Resource
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

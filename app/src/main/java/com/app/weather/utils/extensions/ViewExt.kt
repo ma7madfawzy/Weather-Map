@@ -74,19 +74,20 @@ inline fun SearchView.queryTextListener(
     crossinline onQueryTextSubmit: (newText: String) -> Unit,
     crossinline onQueryTextChange: (newText: String) -> Unit
 ) {
-    object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(newText: String): Boolean {
-            if (newText.isNotEmpty() && newText.count() > 2) {
-                onQueryTextSubmit(newText)
+    setOnQueryTextListener(
+        object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(newText: String): Boolean {
+                if (newText.isNotEmpty() && newText.count() > 2) {
+                    onQueryTextSubmit.invoke(newText)
+                }
+                return false
             }
-            return false
-        }
 
-        override fun onQueryTextChange(newText: String?): Boolean {
-            if (newText?.isNotEmpty() == true && newText.count() > 2) {
-                onQueryTextChange(newText)
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText?.isNotEmpty() == true && newText.count() > 2) {
+                    onQueryTextChange.invoke(newText)
+                }
+                return true
             }
-            return true
-        }
-    }
+        })
 }

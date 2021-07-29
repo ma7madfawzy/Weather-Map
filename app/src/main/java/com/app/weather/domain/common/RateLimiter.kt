@@ -1,12 +1,8 @@
-package com.app.weather.utils.domain
+package com.app.weather.domain.common
 
 import android.os.SystemClock
 import android.util.ArrayMap
 import java.util.concurrent.TimeUnit
-
-/**
- * Created by Fawzy
- */
 
 /**
  * Utility class that decides whether we should fetch some data or not.

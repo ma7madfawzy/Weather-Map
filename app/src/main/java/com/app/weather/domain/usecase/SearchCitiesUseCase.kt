@@ -5,7 +5,7 @@ import androidx.lifecycle.map
 import com.app.weather.data.db.entity.CitiesForSearchEntity
 import com.app.weather.domain.repositories.SearchCitiesRepository
 import com.app.weather.presentation.core.BaseViewState
-import com.app.weather.utils.domain.Resource
+import com.app.weather.domain.common.Resource
 import javax.inject.Inject
 
 /**

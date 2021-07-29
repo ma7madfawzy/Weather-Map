@@ -38,9 +38,11 @@ class SearchFragment : BaseVmFragment<SearchViewModel, FragmentSearchBinding>(
     private fun initSearchView() {
         val searchViewSearchIcon = binding.searchView.findViewById<ImageView>(R.id.search_mag_icon)
         searchViewSearchIcon.setImageResource(R.drawable.ic_search)
-
-        binding.searchView.queryTextListener({ binding.viewModel?.onTextChange(it) },
-            { binding.viewModel?.onTextChange(it) })
+        val queryTextChange: (newText: String) -> Unit = { binding.viewModel?.onTextChange(it) }
+        binding.searchView.queryTextListener(
+            onQueryTextSubmit = queryTextChange,
+            onQueryTextChange = queryTextChange
+        )
     }
 
     private fun initSearchResultsAdapter() {

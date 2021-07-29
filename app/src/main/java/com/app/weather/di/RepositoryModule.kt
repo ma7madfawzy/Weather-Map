@@ -1,14 +1,13 @@
 package com.app.weather.di
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.app.weather.data.datasource.currentWeather.CurrentWeatherLocalDataSource
 import com.app.weather.data.datasource.currentWeather.CurrentWeatherRemoteDataSource
 import com.app.weather.data.datasource.forecast.ForecastLocalDataSource
 import com.app.weather.data.datasource.forecast.ForecastRemoteDataSource
+import com.app.weather.data.datasource.pinned_locations.PinnedLocationsDataSource
 import com.app.weather.data.datasource.searchCities.SearchCitiesLocalDataSource
 import com.app.weather.data.datasource.searchCities.SearchCitiesRemoteDataSource
-import com.app.weather.data.repositories.CurrentLatLngRepositoryImpl
+import com.app.weather.data.repositories.PinnedLocationsRepositoryImpl
 import com.app.weather.data.repositories.CurrentWeatherRepositoryImpl
 import com.app.weather.data.repositories.ForecastRepositoryImpl
 import com.app.weather.data.repositories.SearchCitiesRepositoryImpl
@@ -45,6 +44,6 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCurrentLatLngRepository(dataStore: DataStore<Preferences>) =
-        CurrentLatLngRepositoryImpl(dataStore)
+    fun provideCurrentLatLngRepository(dataSource: PinnedLocationsDataSource) =
+        PinnedLocationsRepositoryImpl(dataSource)
 }

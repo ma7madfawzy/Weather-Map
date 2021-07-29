@@ -6,6 +6,7 @@ import com.app.weather.data.db.WeatherDatabase
 import com.app.weather.data.db.dao.CitiesForSearchDao
 import com.app.weather.data.db.dao.CurrentWeatherDao
 import com.app.weather.data.db.dao.ForecastDao
+import com.app.weather.data.db.dao.LocationDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,5 +38,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideCitiesForSearchDao(db: WeatherDatabase): CitiesForSearchDao = db.citiesForSearchDao()
+
+    @Provides
+    @Singleton
+    fun provideLocationDao(db: WeatherDatabase): LocationDao = db.locationDao()
 
 }

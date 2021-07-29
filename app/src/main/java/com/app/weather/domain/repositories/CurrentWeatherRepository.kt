@@ -2,7 +2,7 @@ package com.app.weather.domain.repositories
 
 import androidx.lifecycle.LiveData
 import com.app.weather.data.db.entity.CurrentWeatherEntity
-import com.app.weather.utils.domain.Resource
+import com.app.weather.domain.common.Resource
 
 /**
  * Created by Fawzy

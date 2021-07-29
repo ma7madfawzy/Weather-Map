@@ -1,29 +1,38 @@
-package com.app.weather.presentation.dashboard
+package com.app.weather.presentation.home
 
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.app.weather.R
-import com.app.weather.databinding.FragmentDashboardBinding
+import com.app.weather.databinding.FragmentHomeBinding
 import com.app.weather.domain.model.ListItem
 import com.app.weather.presentation.core.BaseVmFragment
+import com.app.weather.presentation.core.Constants
+import com.app.weather.presentation.dashboard.DashboardFragmentDirections
 import com.app.weather.presentation.dashboard.forecast.ForecastAdapter
 import com.app.weather.presentation.main.MainActivity
+import com.app.weather.utils.extensions.logE
 import com.app.weather.utils.extensions.observeWith
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDashboardBinding>(
-    R.layout.fragment_dashboard,
-    DashboardFragmentViewModel::class.java,
+class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
+    R.layout.fragment_home,
+    HomeFragmentViewModel::class.java,
 ) {
 
     override fun init() {
         super.init()
         initForecastAdapter()
         sharedElementReturnTransition(android.R.transition.move)
-
-        observeForecastState()
+        viewModel.updateWeatherParams(
+            LatLng(
+                Constants.DataStore.DEFAULT_LAT,
+                Constants.DataStore.DEFAULT_LONG
+            )
+        )
         observeCurrentWeatherState()
+        observePinnedLocationsState()
     }
 
 
@@ -31,6 +40,7 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
         binding.viewModel?.currentWeatherViewState?.observeWith(
             viewLifecycleOwner
         ) {
+            (activity as MainActivity).setToolbarTitle(it.data?.name)
             with(binding) {
                 currentWeatherViewState = it
                 containerForecast.viewState = it
@@ -38,16 +48,13 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
         }
     }
 
-    private fun observeForecastState() {
-        binding.viewModel?.forecastViewState?.observeWith(viewLifecycleOwner) {
-            binding.viewState = it
-            it.data?.list?.let { forecasts -> updateAdapter(forecasts) }
-            (activity as MainActivity).setToolbarTitle(
-                it.data?.city?.getCityAndCountry()
-            )
+    private fun observePinnedLocationsState() {
+        binding.viewModel?.pinnedLocationsWeatherViewState?.observeWith(
+            viewLifecycleOwner
+        ) {
+            logE(it.toString())
         }
     }
-
 
     private fun initForecastAdapter() {
         val adapter = ForecastAdapter { item, cardView, forecastIcon, dayOfWeek, temp, tempMaxMin ->

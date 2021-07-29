@@ -7,17 +7,12 @@ import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.data.db.entity.ForecastEntity
 import com.app.weather.domain.usecase.CurrentWeatherUseCase
 import com.app.weather.domain.usecase.ForecastUseCase
-import com.app.weather.domain.usecase.GetCurrentLatLngUseCase
 import com.app.weather.presentation.core.BaseViewModel
 import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.BaseVmFragment
 import com.app.weather.presentation.core.Constants
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -28,7 +23,6 @@ import javax.inject.Inject
 class DashboardFragmentViewModel @Inject internal constructor(
     private val forecastUseCase: ForecastUseCase,
     private val currentWeatherUseCase: CurrentWeatherUseCase,
-    private val getCurrentLatLngUseCase: GetCurrentLatLngUseCase,
     private val networkAvailableCallback: BaseVmFragment.NetworkAvailableCallback
 ) : BaseViewModel() {
 
@@ -43,13 +37,9 @@ class DashboardFragmentViewModel @Inject internal constructor(
     val currentWeatherViewState: LiveData<BaseViewState<CurrentWeatherEntity>> =
         currentWeatherParams.switchMap { currentWeatherUseCase(it) }
 
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            getCurrentLatLngUseCase().collect {
-                updateWeatherParams(it)
-                updateForecastParams(it)
-            }
-        }
+    fun updateParams(latLng: LatLng) {
+        updateWeatherParams(latLng)
+        updateForecastParams(latLng)
     }
 
     private fun updateForecastParams(latLng: LatLng) {

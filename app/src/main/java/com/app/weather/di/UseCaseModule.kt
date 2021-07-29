@@ -1,6 +1,6 @@
 package com.app.weather.di
 
-import com.app.weather.data.repositories.CurrentLatLngRepositoryImpl
+import com.app.weather.data.repositories.PinnedLocationsRepositoryImpl
 import com.app.weather.data.repositories.CurrentWeatherRepositoryImpl
 import com.app.weather.data.repositories.ForecastRepositoryImpl
 import com.app.weather.data.repositories.SearchCitiesRepositoryImpl
@@ -32,12 +32,12 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideGetCurrentCoordUseCase(currentLatLngRepositoryImpl: CurrentLatLngRepositoryImpl) =
-        GetCurrentLatLngUseCase(currentLatLngRepositoryImpl)
+    fun provideGetCurrentCoordUseCase(currentLatLngRepositoryImpl: PinnedLocationsRepositoryImpl) =
+        GetPinnedLocationsUseCase(currentLatLngRepositoryImpl)
 
     @Provides
     @Singleton
-    fun provideSetCurrentCoordUseCase(currentLatLngRepositoryImpl: CurrentLatLngRepositoryImpl) =
-        SetCurrentLatLngUseCase(currentLatLngRepositoryImpl)
+    fun provideSetCurrentCoordUseCase(currentLatLngRepositoryImpl: PinnedLocationsRepositoryImpl) =
+        InsertPinnedLocationUseCase(currentLatLngRepositoryImpl)
 
 }

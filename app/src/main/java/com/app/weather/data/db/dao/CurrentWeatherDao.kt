@@ -19,12 +19,12 @@ interface CurrentWeatherDao {
 
     @Transaction
     fun deleteAndInsert(currentWeatherEntity: CurrentWeatherEntity) {
-        deleteCurrentWeather()
+//        deleteAll()
         insertCurrentWeather(currentWeatherEntity)
     }
 
     @Query("DELETE FROM CurrentWeather")
-    fun deleteCurrentWeather()
+    fun deleteAll()
 
     @Query("Select count(*) from CurrentWeather")
     fun getCount(): Int

@@ -7,7 +7,7 @@ import com.app.weather.domain.repositories.ForecastRepository
 import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.Constants
 import com.app.weather.presentation.dashboard.ForecastMapper
-import com.app.weather.utils.domain.Resource
+import com.app.weather.domain.common.Resource
 import javax.inject.Inject
 
 /**

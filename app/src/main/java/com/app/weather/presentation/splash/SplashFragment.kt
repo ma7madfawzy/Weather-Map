@@ -27,8 +27,8 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_spl
 
     private fun endSplashAnimation() {
         animationHandler.endSplashAnimation(onTerminateAction = {
-            findNavController().graph.setStartDestination(R.id.dashboardFragment) // Little bit tricky solution :)
-            navigate(R.id.action_splashFragment_to_dashboardFragment)
+            findNavController().graph.setStartDestination(R.id.homeFragment)
+            navigate(R.id.action_splashFragment_to_homeFragment)
         })
     }
 

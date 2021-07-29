@@ -6,10 +6,10 @@ import com.app.weather.data.datasource.currentWeather.CurrentWeatherRemoteDataSo
 import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.domain.model.CurrentWeatherResponse
 import com.app.weather.domain.repositories.CurrentWeatherRepository
-import com.app.weather.domain.repositories.NetworkBoundResource
+import com.app.weather.domain.commmon.NetworkBoundResource
 import com.app.weather.presentation.core.Constants
-import com.app.weather.utils.domain.RateLimiter
-import com.app.weather.utils.domain.Resource
+import com.app.weather.domain.common.RateLimiter
+import com.app.weather.domain.common.Resource
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

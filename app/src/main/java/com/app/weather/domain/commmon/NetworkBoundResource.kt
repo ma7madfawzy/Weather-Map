@@ -1,10 +1,9 @@
-package com.app.weather.domain.repositories
+package com.app.weather.domain.commmon
 
 import androidx.annotation.MainThread
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.app.weather.utils.domain.Resource
+import com.app.weather.domain.common.Resource
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.Single

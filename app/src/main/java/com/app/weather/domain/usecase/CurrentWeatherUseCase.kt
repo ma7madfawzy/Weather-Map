@@ -6,7 +6,7 @@ import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.domain.repositories.CurrentWeatherRepository
 import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.Constants
-import com.app.weather.utils.domain.Resource
+import com.app.weather.domain.common.Resource
 import javax.inject.Inject
 
 /**
@@ -17,7 +17,6 @@ class CurrentWeatherUseCase @Inject internal constructor(
     private val repository: CurrentWeatherRepository
 ) {
 
-
     operator fun invoke(params: CurrentWeatherParams?): LiveData<BaseViewState<CurrentWeatherEntity>> {
         return repository.loadCurrentWeatherByGeoCords(
             params?.lat?.toDouble() ?: 0.0,
@@ -26,12 +25,8 @@ class CurrentWeatherUseCase @Inject internal constructor(
                 ?: false,
             units = params?.units ?: Constants.Coords.METRIC
         ).map {
-            onCurrentWeatherResultReady(it)
+            BaseViewState(it)
         }
-    }
-
-    private fun onCurrentWeatherResultReady(resource: Resource<CurrentWeatherEntity>): BaseViewState<CurrentWeatherEntity> {
-        return BaseViewState(resource)
     }
 
 
