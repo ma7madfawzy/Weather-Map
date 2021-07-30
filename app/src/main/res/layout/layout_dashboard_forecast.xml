@@ -6,20 +6,20 @@
     <data>
 
         <import type="android.view.View" />
-        <variable
-            name="viewState"
-            type="com.app.weather.presentation.core.BaseViewState&lt;com.app.weather.data.db.entity.CurrentWeatherEntity&gt;" />
+        <variable 
+            name="entity"
+            type="com.app.weather.data.db.entity.CurrentWeatherEntity" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@{viewState.data.getColor()}"
+        android:backgroundTint="@{entity.getColor()}"
         android:fitsSystemWindows="true"
-        app:visibility="@{viewState.isLoading() ? View.INVISIBLE : View.VISIBLE}"
         app:cardCornerRadius="24dp"
         app:cardElevation="8dp"
+        tools:showIn="@layout/fragment_dashboard"
         tools:visibility="invisible">
 
         <RelativeLayout
@@ -33,7 +33,7 @@
                 android:layout_height="124dp"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="48dp"
-                app:setWeatherIcon="@{viewState.data.getCurrentWeather().icon}"
+                app:setWeatherIcon="@{entity.getCurrentWeather().icon}"
                 tools:src="@drawable/a10d_svg" />
 
             <TextView
@@ -43,7 +43,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="36dp"
-                android:text="@{viewState.data.main.getTempString()}"
+                android:text="@{entity.main.getTempString()}"
                 android:textColor="@color/white"
                 android:textSize="100sp"
                 tools:text="36°" />
@@ -55,7 +55,7 @@
                 android:layout_below="@id/textViewTemperature"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:text="@{viewState.data.getCurrentWeather().main}"
+                android:text="@{entity.getCurrentWeather().main}"
                 android:textColor="@color/white"
                 android:textSize="23sp"
                 tools:text="Clouds &amp; Sun" />
@@ -79,7 +79,7 @@
                 android:layout_below="@id/textViewHumidityHeader"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="24dp"
-                android:text="@{viewState.data.main.getHumidityString()}"
+                android:text="@{entity.main.getHumidityString()}"
                 android:textColor="@color/whiteWithOpacity"
                 android:textSize="27sp"
                 tools:text="32°" />

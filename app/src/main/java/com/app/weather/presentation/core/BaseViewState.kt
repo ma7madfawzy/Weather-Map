@@ -10,6 +10,7 @@ import com.app.weather.domain.common.Status
 
 open class BaseViewState<T:Any>(private val baseStatus: Status, private val baseError: String?, val data:T?) {
     fun isLoading() = baseStatus == Status.LOADING
+    fun isSuccess() = baseStatus == Status.SUCCESS
     fun getErrorMessage() = baseError
     fun shouldShowErrorMessage() = baseError != null
     constructor(resource: Resource<T>):this(resource.status, resource.message, resource.data)

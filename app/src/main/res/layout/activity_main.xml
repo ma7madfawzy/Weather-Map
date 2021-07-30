@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:setDisplayHomeAsUpEnabled="@{false}"
-            app:setNavigationIcon="@{destinationId.equals(@id/dashboardFragment)?null:@drawable/ic_back}"
+            app:setNavigationIcon="@{destinationId.equals(@id/homeFragment)?null:@drawable/ic_back}"
             app:hide="@{destinationId.equals(@id/splashFragment)||destinationId.equals(@id/searchFragment)}"
             android:background="@color/white"
             android:gravity="center">

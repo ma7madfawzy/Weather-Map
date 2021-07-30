@@ -9,8 +9,6 @@ import com.app.weather.domain.common.Resource
  */
 
 interface CurrentWeatherRepository {
-
-
     fun loadCurrentWeatherByGeoCords(
         lat: Double,
         lon: Double,

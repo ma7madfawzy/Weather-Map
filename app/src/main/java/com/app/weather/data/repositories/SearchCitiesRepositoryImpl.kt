@@ -5,7 +5,7 @@ import com.app.weather.data.datasource.searchCities.SearchCitiesLocalDataSource
 import com.app.weather.data.datasource.searchCities.SearchCitiesRemoteDataSource
 import com.app.weather.data.db.entity.CitiesForSearchEntity
 import com.app.weather.domain.model.SearchResponse
-import com.app.weather.domain.commmon.NetworkBoundResource
+import com.app.weather.domain.common.NetworkBoundResource
 import com.app.weather.domain.repositories.SearchCitiesRepository
 import com.app.weather.presentation.core.Constants.NetworkService.RATE_LIMITER_TYPE
 import com.app.weather.domain.common.RateLimiter

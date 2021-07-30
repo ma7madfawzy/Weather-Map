@@ -1,4 +1,4 @@
-package com.app.weather.presentation.home.forecast
+package com.app.weather.presentation.home.pinned_locations
 
 import androidx.databinding.ObservableField
 import com.app.weather.presentation.core.BaseViewModel

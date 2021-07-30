@@ -20,5 +20,12 @@
     <string name="see_on_github">See on Github</string>
     <string name="dismiss">Dismiss</string>
     <string name="unexpected_exception" />
+    <string name="pinned_locations">Pinned locations</string>
+    <string name="requireGps">we need you to enable gps to enable us get your physical location</string>
+    <string name="ok">OK</string>
+    <string name="negative">Cancel</string>
+    <string name="enableGps">please_enable_GPS_to_help_us_find_your_physical_location</string>
+    <string name="location_settings">location_settings</string>
+    <string name="gps">GPS</string>
 
 </resources>

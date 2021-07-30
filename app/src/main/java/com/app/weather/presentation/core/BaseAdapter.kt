@@ -10,11 +10,12 @@ import com.app.weather.R
  * Created by Fawzy
  */
 
-abstract class BaseAdapter<T>(callback: DiffUtil.ItemCallback<T>) : ListAdapter<T, BaseViewHolder<ViewDataBinding>>(
-    callback
-) {
+abstract class BaseAdapter<T, binding : ViewDataBinding>(callback: DiffUtil.ItemCallback<T>) :
+    ListAdapter<T, BaseViewHolder<binding>>(
+        callback
+    ) {
 
-    override fun onBindViewHolder(holder: BaseViewHolder<ViewDataBinding>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<binding>, position: Int) {
         (holder as BaseViewHolder<*>).binding.root.setTag(R.string.position, position)
         bind(holder.binding, position)
     }
@@ -28,7 +29,7 @@ abstract class BaseAdapter<T>(callback: DiffUtil.ItemCallback<T>) : ListAdapter<
         createBinding(parent, viewType)
     )
 
-    abstract fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding
+    abstract fun createBinding(parent: ViewGroup, viewType: Int): binding
 
-    protected abstract fun bind(binding: ViewDataBinding, position: Int)
+    protected abstract fun bind(binding: binding, position: Int)
 }

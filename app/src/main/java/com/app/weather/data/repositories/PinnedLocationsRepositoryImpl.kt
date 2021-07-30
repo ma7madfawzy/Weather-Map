@@ -1,9 +1,7 @@
 package com.app.weather.data.repositories
 
-import androidx.lifecycle.LiveData
 import com.app.weather.data.datasource.pinned_locations.PinnedLocationsDataSource
 import com.app.weather.data.db.entity.LocationEntity
-import com.app.weather.domain.common.Resource
 import com.app.weather.domain.repositories.PinnedLocationsRepository
 import javax.inject.Inject
 

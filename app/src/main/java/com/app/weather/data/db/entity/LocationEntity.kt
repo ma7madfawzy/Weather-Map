@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.android.gms.maps.model.LatLng
+import com.algolia.search.saas.AbstractQuery
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -16,16 +16,14 @@ import kotlinx.parcelize.Parcelize
 data class LocationEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id: Int,
+    var id: Long,
     @ColumnInfo(name = "lat")
     var lat: Double?,
     @ColumnInfo(name = "lng")
     var lng: Double?,
 ) : Parcelable {
-    constructor(coordinateEntity: CoordEntity) : this(
-        0,
-        coordinateEntity.lat ?: 0.0,
-        coordinateEntity.lon ?: 0.0
-    )
-    fun latLang()=LatLng(lat?: 0.0,lng?: 0.0)
+
+    constructor(latLng: AbstractQuery.LatLng) : this(0,latLng.lat,latLng.lng)
+
+    fun latLang()= AbstractQuery.LatLng(lat ?: 0.0, lng ?: 0.0)
 }

@@ -32,12 +32,16 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideGetCurrentCoordUseCase(currentLatLngRepositoryImpl: PinnedLocationsRepositoryImpl) =
+    fun provideGetPinnedLocationsUseCase(currentLatLngRepositoryImpl: PinnedLocationsRepositoryImpl) =
         GetPinnedLocationsUseCase(currentLatLngRepositoryImpl)
 
     @Provides
     @Singleton
-    fun provideSetCurrentCoordUseCase(currentLatLngRepositoryImpl: PinnedLocationsRepositoryImpl) =
+    fun provideInsertPinnedLocationUseCase(currentLatLngRepositoryImpl: PinnedLocationsRepositoryImpl) =
         InsertPinnedLocationUseCase(currentLatLngRepositoryImpl)
+    @Provides
+    @Singleton
+    fun provideDeletePinnedLocationUseCase(currentLatLngRepositoryImpl: PinnedLocationsRepositoryImpl) =
+        DeletePinnedLocationUseCase(currentLatLngRepositoryImpl)
 
 }

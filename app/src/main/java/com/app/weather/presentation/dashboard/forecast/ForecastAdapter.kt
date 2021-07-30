@@ -15,9 +15,9 @@ import com.app.weather.domain.model.ListItem
 
 class ForecastAdapter(
     private val callBack: (ListItem, View, View, View, View, View) -> Unit
-) : BaseAdapter<ListItem>(diffCallback) {
+) : BaseAdapter<ListItem,ItemForecastBinding>(diffCallback) {
 
-    override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {
+    override fun createBinding(parent: ViewGroup, viewType: Int): ItemForecastBinding {
         val mBinding = ItemForecastBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -41,7 +41,7 @@ class ForecastAdapter(
         return mBinding
     }
 
-    override fun bind(binding: ViewDataBinding, position: Int) {
+    override fun bind(binding: ItemForecastBinding, position: Int) {
         (binding as ItemForecastBinding).viewModel?.item?.set(getItem(position))
         binding.executePendingBindings()
     }

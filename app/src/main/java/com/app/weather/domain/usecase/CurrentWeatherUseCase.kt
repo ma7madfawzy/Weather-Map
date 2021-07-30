@@ -19,8 +19,8 @@ class CurrentWeatherUseCase @Inject internal constructor(
 
     operator fun invoke(params: CurrentWeatherParams?): LiveData<BaseViewState<CurrentWeatherEntity>> {
         return repository.loadCurrentWeatherByGeoCords(
-            params?.lat?.toDouble() ?: 0.0,
-            params?.lon?.toDouble() ?: 0.0,
+            params?.lat ?: 0.0,
+            params?.lon ?: 0.0,
             params?.fetchRequired
                 ?: false,
             units = params?.units ?: Constants.Coords.METRIC
@@ -31,8 +31,8 @@ class CurrentWeatherUseCase @Inject internal constructor(
 
 
     class CurrentWeatherParams(
-        val lat: String = "",
-        val lon: String = "",
+        val lat: Double = 0.0,
+        val lon: Double=0.0,
         val fetchRequired: Boolean,
         val units: String
     )

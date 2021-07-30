@@ -20,7 +20,7 @@ import com.app.weather.data.db.typeconverters.DataConverter
         CitiesForSearchEntity::class,
         LocationEntity::class
     ],
-    version = 2
+    version = 1
 )
 @TypeConverters(DataConverter::class)
 abstract class WeatherDatabase : RoomDatabase() {

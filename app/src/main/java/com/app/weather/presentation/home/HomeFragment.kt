@@ -1,40 +1,43 @@
 package com.app.weather.presentation.home
 
+import android.location.Location
 import android.view.View
 import androidx.navigation.fragment.findNavController
+import com.algolia.search.saas.AbstractQuery
 import com.app.weather.R
+import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.databinding.FragmentHomeBinding
-import com.app.weather.domain.model.ListItem
-import com.app.weather.presentation.core.BaseVmFragment
+import com.app.weather.presentation.core.BaseVmRequireLocationFragment
 import com.app.weather.presentation.core.Constants
-import com.app.weather.presentation.dashboard.DashboardFragmentDirections
-import com.app.weather.presentation.dashboard.forecast.ForecastAdapter
+import com.app.weather.presentation.home.pinned_locations.PinnedLocationsAdapter
 import com.app.weather.presentation.main.MainActivity
-import com.app.weather.utils.extensions.logE
+import com.app.weather.utils.LocationTracker
 import com.app.weather.utils.extensions.observeWith
-import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
+class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, FragmentHomeBinding>(
     R.layout.fragment_home,
     HomeFragmentViewModel::class.java,
 ) {
-
     override fun init() {
         super.init()
         initForecastAdapter()
         sharedElementReturnTransition(android.R.transition.move)
-        viewModel.updateWeatherParams(
-            LatLng(
-                Constants.DataStore.DEFAULT_LAT,
-                Constants.DataStore.DEFAULT_LONG
-            )
-        )
         observeCurrentWeatherState()
         observePinnedLocationsState()
     }
 
+    private fun updateWeatherParam(latLng: AbstractQuery.LatLng) {
+        viewModel.updateWeatherParams(latLng)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getAdapter().clearData()
+        viewModel.fetchPinnedLocations()
+    }
 
     private fun observeCurrentWeatherState() {
         binding.viewModel?.currentWeatherViewState?.observeWith(
@@ -43,7 +46,7 @@ class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
             (activity as MainActivity).setToolbarTitle(it.data?.name)
             with(binding) {
                 currentWeatherViewState = it
-                containerForecast.viewState = it
+                containerForecast.entity = it.data
             }
         }
     }
@@ -52,22 +55,19 @@ class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
         binding.viewModel?.pinnedLocationsWeatherViewState?.observeWith(
             viewLifecycleOwner
         ) {
-            logE(it.toString())
+            it?.let { list -> updateAdapter(list) }
         }
     }
 
     private fun initForecastAdapter() {
-        val adapter = ForecastAdapter { item, cardView, forecastIcon, dayOfWeek, temp, tempMaxMin ->
+        val adapter = PinnedLocationsAdapter { entity, pos, card, temp ->
             findNavController()
                 .navigate(
-                    getActionDashboardFragmentToWeatherDetailFragment(item),
-                    getWeatherDetailsSharedElementsExtras(
-                        cardView,
-                        forecastIcon,
-                        dayOfWeek,
-                        temp,
-                        tempMaxMin
-                    )
+                    HomeFragmentDirections.actionHomeFragmentToDashboardFragment(
+                        true,
+                        viewModel.getLatByPosition(pos), viewModel.getLngByPosition(pos)
+                    ),
+                    getWeatherDetailsSharedElementsExtras(card, temp)
                 )
         }
         binding.recyclerForecast.adapter = adapter
@@ -83,23 +83,33 @@ class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
             }
     }
 
-    private fun getActionDashboardFragmentToWeatherDetailFragment(item: ListItem) =
-        DashboardFragmentDirections.actionDashboardFragmentToWeatherDetailFragment(item)
-
-    private fun getWeatherDetailsSharedElementsExtras(
-        cardView: View, forecastIcon: View, dayOfWeek: View, temp: View, tempMaxMin: View
-    ) = addSharedElements(
-        mapOf(
-            cardView to cardView.transitionName,
-            forecastIcon to forecastIcon.transitionName,
-            dayOfWeek to dayOfWeek.transitionName,
-            temp to temp.transitionName,
-            tempMaxMin to tempMaxMin.transitionName
+    private fun getWeatherDetailsSharedElementsExtras(cardView: View, forecastIcon: View) =
+        addSharedElements(
+            mapOf(
+                cardView to cardView.transitionName,
+                forecastIcon to forecastIcon.transitionName,
+            )
         )
-    )
 
+    private fun updateAdapter(list: List<CurrentWeatherEntity>) {
+        getAdapter().submitList(list)
+    }
 
-    private fun updateAdapter(list: List<ListItem>) {
-        (binding.recyclerForecast.adapter as ForecastAdapter).submitList(list)
+    private fun getAdapter() = (binding.recyclerForecast.adapter as PinnedLocationsAdapter)
+    override fun onLocationResult(obj: LocationTracker?, location: Location) {
+        updateWeatherParam(AbstractQuery.LatLng(location.latitude, location.longitude))
+    }
+
+    override fun onLocationError(obj: LocationTracker?, errorCode: Int, msg: String?) {
+        setToLondon()
+    }
+
+    private fun setToLondon() {
+        updateWeatherParam(
+            AbstractQuery.LatLng(
+                Constants.DataStore.DEFAULT_LAT,
+                Constants.DataStore.DEFAULT_LONG
+            )
+        )
     }
 }

@@ -1,9 +1,8 @@
-package com.app.weather.domain.commmon
+package com.app.weather.domain.common
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.app.weather.domain.common.Resource
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.Single
@@ -30,7 +29,6 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         result.value = Resource.loading()
         @Suppress("LeakingThis")
         dbSource = loadFromDb()
-        //observe loadFromDb() changes
         result.addSource(dbSource) { data ->
             //remove the source when changed
             result.removeSource(dbSource)

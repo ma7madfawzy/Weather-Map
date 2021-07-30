@@ -58,6 +58,11 @@ fun setNavigationIconTint(toolbar: Toolbar, color: Int) {
     toolbar.navigationIcon?.setTint(color)
 }
 
+@BindingAdapter("tint")
+fun tint(imageView: ImageView, color: Int) {
+    imageView.setColorFilter(color)
+}
+
 @BindingAdapter("setNavigationIcon")
 fun setNavigationIcon(toolbar: Toolbar, @DrawableRes drawable: Int?) {
     toolbar.setNavigationIcon(drawable ?: 0)
@@ -77,16 +82,19 @@ fun searchViewEditTextColor(view: SearchView, color: Int) {
     val searchEditText: EditText = view.findViewById(R.id.search_src_text)
     view.context?.let { searchEditText.setTextColor(color) }
 }
+
 @BindingAdapter("searchViewEditHintColor")
 fun searchViewEditHintColor(view: SearchView, color: Int) {
     val searchEditText: EditText = view.findViewById(R.id.search_src_text)
     view.context?.let { searchEditText.setHintTextColor(color) }
 }
+
 @BindingAdapter("setIconifiedByDefault")
 fun setIconifiedByDefault(view: SearchView, value: Boolean) {
     view.setIconifiedByDefault(value)
     view.isIconified = value
 }
+
 @BindingAdapter("setIsSearchViewActivated")
 fun setIsSearchViewActivated(view: SearchView, value: Boolean) {
     view.isActivated = value

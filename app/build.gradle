@@ -107,16 +107,15 @@ dependencies {
 
     // local database
     // Room
-    implementation "androidx.room:room-runtime:2.3.0"
+    implementation 'androidx.room:room-ktx:2.3.0'
     kapt 'androidx.room:room-compiler:2.3.0'
     //preferences DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0-rc02"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    //Places provided by google to search addresses
-    implementation 'com.google.android.libraries.places:places:2.4.0'
 
+    //to search Places
     implementation 'com.algolia:algoliasearch-android:3.27.0'
 }
 ktlint {

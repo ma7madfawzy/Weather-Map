@@ -2,6 +2,7 @@ package com.app.weather.presentation.dashboard
 
 import android.view.View
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.app.weather.R
 import com.app.weather.databinding.FragmentDashboardBinding
 import com.app.weather.domain.model.ListItem
@@ -16,7 +17,7 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
     R.layout.fragment_dashboard,
     DashboardFragmentViewModel::class.java,
 ) {
-
+    private val args: DashboardFragmentArgs by navArgs()
     override fun init() {
         super.init()
         initForecastAdapter()
@@ -24,6 +25,8 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
 
         observeForecastState()
         observeCurrentWeatherState()
+        viewModel.updateParams(args.lat, args.lng).isPinned.set(args.isPinned)
+
     }
 
 
@@ -33,7 +36,7 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
         ) {
             with(binding) {
                 currentWeatherViewState = it
-                containerForecast.viewState = it
+                containerForecast.entity = it.data
             }
         }
     }
@@ -53,7 +56,7 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
         val adapter = ForecastAdapter { item, cardView, forecastIcon, dayOfWeek, temp, tempMaxMin ->
             findNavController()
                 .navigate(
-                    getActionDashboardFragmentToWeatherDetailFragment(item),
+                    DashboardFragmentDirections.actionDashboardFragmentToWeatherDetailFragment(item),
                     getWeatherDetailsSharedElementsExtras(
                         cardView,
                         forecastIcon,
@@ -76,8 +79,6 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
             }
     }
 
-    private fun getActionDashboardFragmentToWeatherDetailFragment(item: ListItem) =
-        DashboardFragmentDirections.actionDashboardFragmentToWeatherDetailFragment(item)
 
     private fun getWeatherDetailsSharedElementsExtras(
         cardView: View, forecastIcon: View, dayOfWeek: View, temp: View, tempMaxMin: View

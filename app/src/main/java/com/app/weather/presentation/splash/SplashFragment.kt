@@ -13,7 +13,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_spl
     override fun init() {
         super.init()
         initAnimationHandler()
-
     }
 
     private fun initAnimationHandler() {

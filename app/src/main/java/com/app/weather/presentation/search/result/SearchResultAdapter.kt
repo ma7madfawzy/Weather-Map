@@ -2,7 +2,6 @@ package com.app.weather.presentation.search.result
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import com.app.weather.data.db.entity.CitiesForSearchEntity
 import com.app.weather.databinding.ItemSearchResultBinding
@@ -12,11 +11,12 @@ import com.app.weather.presentation.core.BaseAdapter
  * Created by Fawzy
  */
 
-class SearchResultAdapter(private val callBack: (CitiesForSearchEntity) -> Unit) : BaseAdapter<CitiesForSearchEntity>(
-    diffCallback
-) {
+class SearchResultAdapter(private val callBack: (CitiesForSearchEntity) -> Unit) :
+    BaseAdapter<CitiesForSearchEntity, ItemSearchResultBinding>(
+        diffCallback
+    ) {
 
-    override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {
+    override fun createBinding(parent: ViewGroup, viewType: Int): ItemSearchResultBinding {
         val mBinding = ItemSearchResultBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -33,16 +33,22 @@ class SearchResultAdapter(private val callBack: (CitiesForSearchEntity) -> Unit)
         return mBinding
     }
 
-    override fun bind(binding: ViewDataBinding, position: Int) {
-        (binding as ItemSearchResultBinding).viewModel?.item?.set(getItem(position))
+    override fun bind(binding: ItemSearchResultBinding, position: Int) {
+        binding.viewModel?.item?.set(getItem(position))
         binding.executePendingBindings()
     }
 }
 
 val diffCallback = object : DiffUtil.ItemCallback<CitiesForSearchEntity>() {
-    override fun areContentsTheSame(oldItem: CitiesForSearchEntity, newItem: CitiesForSearchEntity): Boolean =
+    override fun areContentsTheSame(
+        oldItem: CitiesForSearchEntity,
+        newItem: CitiesForSearchEntity
+    ): Boolean =
         oldItem == newItem
 
-    override fun areItemsTheSame(oldItem: CitiesForSearchEntity, newItem: CitiesForSearchEntity): Boolean =
+    override fun areItemsTheSame(
+        oldItem: CitiesForSearchEntity,
+        newItem: CitiesForSearchEntity
+    ): Boolean =
         oldItem.name == newItem.name
 }

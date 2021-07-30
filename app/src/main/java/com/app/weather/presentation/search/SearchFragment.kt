@@ -7,6 +7,7 @@ import com.app.weather.R
 import com.app.weather.data.db.entity.CitiesForSearchEntity
 import com.app.weather.databinding.FragmentSearchBinding
 import com.app.weather.presentation.core.BaseVmFragment
+import com.app.weather.presentation.dashboard.DashboardFragmentDirections
 import com.app.weather.presentation.main.MainActivity
 import com.app.weather.presentation.search.result.SearchResultAdapter
 import com.app.weather.utils.extensions.hideKeyboard
@@ -48,9 +49,9 @@ class SearchFragment : BaseVmFragment<SearchViewModel, FragmentSearchBinding>(
     private fun initSearchResultsAdapter() {
         val adapter = SearchResultAdapter { item ->
             item.coord?.let {
-                binding.viewModel?.saveCoordinates(it)
                 binding.searchView.hideKeyboard((activity as MainActivity))
-                findNavController().navigate(R.id.action_searchFragment_to_dashboardFragment)
+                findNavController()
+                    .navigate(SearchFragmentDirections.actionSearchFragmentToDashboardFragment(false,it.lat?:0.0,it.lon?:0.0))
             }
         }
 

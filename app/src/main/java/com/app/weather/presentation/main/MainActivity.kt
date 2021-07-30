@@ -54,7 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(
             findNavController(R.id.container_fragment),
-            AppBarConfiguration(setOf(R.id.dashboardFragment))
+            AppBarConfiguration(setOf(R.id.homeFragment))
         )
     }
 

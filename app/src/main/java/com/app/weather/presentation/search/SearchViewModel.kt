@@ -6,7 +6,6 @@ import androidx.lifecycle.switchMap
 import com.app.weather.data.db.entity.CitiesForSearchEntity
 import com.app.weather.data.db.entity.CoordEntity
 import com.app.weather.domain.usecase.SearchCitiesUseCase
-import com.app.weather.domain.usecase.InsertPinnedLocationUseCase
 import com.app.weather.presentation.core.BaseViewModel
 import com.app.weather.presentation.core.BaseViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject internal constructor(
-    private val useCase: SearchCitiesUseCase,
-    private val insertPinnedLocationUseCase: InsertPinnedLocationUseCase
+    private val useCase: SearchCitiesUseCase
 ) : BaseViewModel() {
 
     private val cityNameData: MutableLiveData<String> = MutableLiveData()
@@ -38,12 +36,5 @@ class SearchViewModel @Inject internal constructor(
             return
         }
         cityNameData.postValue(text)
-    }
-
-    @ExperimentalCoroutinesApi
-    fun saveCoordinates(coordinateEntity: CoordEntity) {
-        CoroutineScope(Dispatchers.IO).launch {
-            insertPinnedLocationUseCase(coordinateEntity)
-        }
     }
 }

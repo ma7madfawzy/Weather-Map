@@ -47,7 +47,7 @@
             android:backgroundTint="@{viewModel.item.getColor()}"
             android:clickable="true"
             android:focusable="true"
-            android:transitionName="@{String.format(@string/cardView, viewModel.item.getDay())}"
+            android:transitionName="card"
             app:cardCornerRadius="24dp"
             tools:backgroundTint="@android:color/holo_orange_dark">
 
@@ -86,7 +86,7 @@
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:transitionName="@{String.format(@string/dayOfWeek, viewModel.item.getDay())}"
+                    android:transitionName="dayOfWeek"
                     tools:text="Sunday" />
 
                 <ImageView
@@ -96,7 +96,7 @@
                     android:layout_below="@id/textViewDayOfWeek"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="12dp"
-                    android:transitionName="@{String.format(@string/forecastIcon, viewModel.item.getDay())}"
+                    android:transitionName="forecastIcon"
                     app:setWeatherIcon="@{viewModel.item.getWeatherItem().icon}"
                     tools:src="@drawable/ic_splash_big_cloud" />
 
@@ -111,7 +111,7 @@
                     android:textColor="@color/white"
                     android:textSize="26sp"
                     android:textStyle="bold"
-                    android:transitionName="@{String.format(@string/temp, viewModel.item.getDay())}"
+                    android:transitionName="temp"
                     tools:text="18°" />
 
                 <LinearLayout
@@ -121,7 +121,7 @@
                     android:layout_below="@id/textViewTemp"
                     android:layout_centerHorizontal="true"
                     android:orientation="horizontal"
-                    android:transitionName="@{String.format(@string/tempMaxMin, viewModel.item.getDay())}">
+                    android:transitionName="tempMaxMin">
 
                     <TextView
                         android:layout_width="wrap_content"

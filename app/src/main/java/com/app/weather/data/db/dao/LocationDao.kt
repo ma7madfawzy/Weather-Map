@@ -3,6 +3,7 @@ package com.app.weather.data.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.app.weather.data.db.entity.LocationEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Fawzy
@@ -15,7 +16,7 @@ interface LocationDao {
     fun getAll(): LiveData<List<LocationEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(entity: LocationEntity)
+    fun insert(entity: LocationEntity):Long
 
     @Transaction
     fun deleteAndInsert(entity: LocationEntity) {

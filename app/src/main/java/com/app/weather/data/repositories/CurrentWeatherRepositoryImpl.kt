@@ -6,7 +6,7 @@ import com.app.weather.data.datasource.currentWeather.CurrentWeatherRemoteDataSo
 import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.domain.model.CurrentWeatherResponse
 import com.app.weather.domain.repositories.CurrentWeatherRepository
-import com.app.weather.domain.commmon.NetworkBoundResource
+import com.app.weather.domain.common.NetworkBoundResource
 import com.app.weather.presentation.core.Constants
 import com.app.weather.domain.common.RateLimiter
 import com.app.weather.domain.common.Resource

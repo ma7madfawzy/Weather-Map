@@ -2,21 +2,21 @@ package com.app.weather.presentation.weather_detail.weatherHourOfDay
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
-import com.app.weather.presentation.core.BaseAdapter
 import com.app.weather.databinding.ItemWeatherHourOfDayBinding
 import com.app.weather.domain.model.ListItem
+import com.app.weather.presentation.core.BaseAdapter
 
 /**
  * Created by Fawzy
  */
 
-class WeatherHourOfDayAdapter(private val callBack: (ListItem) -> Unit?={}) : BaseAdapter<ListItem>(
-    diffCallback
-) {
+class WeatherHourOfDayAdapter(private val callBack: (ListItem) -> Unit? = {}) :
+    BaseAdapter<ListItem, ItemWeatherHourOfDayBinding>(
+        diffCallback
+    ) {
 
-    override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {
+    override fun createBinding(parent: ViewGroup, viewType: Int): ItemWeatherHourOfDayBinding {
         val mBinding = ItemWeatherHourOfDayBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -33,8 +33,8 @@ class WeatherHourOfDayAdapter(private val callBack: (ListItem) -> Unit?={}) : Ba
         return mBinding
     }
 
-    override fun bind(binding: ViewDataBinding, position: Int) {
-        (binding as ItemWeatherHourOfDayBinding).viewModel?.item?.set(getItem(position))
+    override fun bind(binding: ItemWeatherHourOfDayBinding, position: Int) {
+        binding.viewModel?.item?.set(getItem(position))
         binding.executePendingBindings()
     }
 }
