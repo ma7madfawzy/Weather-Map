@@ -9,7 +9,6 @@ import com.app.weather.domain.model.ListItem
 import com.app.weather.presentation.core.BaseVmFragment
 import com.app.weather.presentation.dashboard.forecast.ForecastAdapter
 import com.app.weather.presentation.main.MainActivity
-import com.app.weather.utils.extensions.logE
 import com.app.weather.utils.extensions.observeWith
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,13 +19,22 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
 ) {
     override fun init() {
         super.init()
-        binding.viewModel=viewModel
+        binding.viewModel = viewModel
         initForecastAdapter()
-        sharedElementReturnTransition(android.R.transition.move)
+        sharedElementReturnTransition(android.R.transition.slide_right)
 
         observeForecastState()
         val args: DashboardFragmentArgs by navArgs()
         viewModel.updateParams(args.lat, args.lng).isPinned.set(args.isPinned)
+        initCardClickListener()
+    }
+
+    private fun initCardClickListener() {
+        binding.container.cardView.setOnClickListener {
+            navigateToDetails(
+                viewModel.forecastViewState.value?.data?.list?.get(0)!!
+            )
+        }
     }
 
 
@@ -43,20 +51,18 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
 
 
     private fun initForecastAdapter() {
-        val adapter = ForecastAdapter { item, cardView, forecastIcon, dayOfWeek, temp, tempMaxMin ->
-            findNavController()
-                .navigate(
-                    DashboardFragmentDirections.actionDashboardFragmentToWeatherDetailFragment(
-                        item, viewModel.forecastViewState.value?.data!!
-                    ),
-                    getWeatherDetailsSharedElementsExtras(
-                        cardView, forecastIcon, dayOfWeek,
-                        temp, tempMaxMin
-                    )
-                )
-        }
+        val adapter = ForecastAdapter { navigateToDetails(it) }
         binding.recyclerForecast.adapter = adapter
         handleEnterTransition()
+    }
+
+    private fun navigateToDetails(item: ListItem) {
+        findNavController()
+            .navigate(
+                DashboardFragmentDirections.actionDashboardFragmentToWeatherDetailFragment(
+                    item, viewModel.forecastViewState.value?.data!!
+                )
+            )
     }
 
     private fun handleEnterTransition() {

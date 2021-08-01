@@ -14,7 +14,7 @@ import com.app.weather.domain.model.ListItem
  */
 
 class ForecastAdapter(
-    private val callBack: (ListItem, View, View, View, View, View) -> Unit
+    private val callBack: (ListItem) -> Unit
 ) : BaseAdapter<ListItem,ItemForecastBinding>(diffCallback) {
 
     override fun createBinding(parent: ViewGroup, viewType: Int): ItemForecastBinding {
@@ -28,14 +28,7 @@ class ForecastAdapter(
 
         mBinding.cardView.setOnClickListener {
             mBinding.viewModel?.item?.get()?.let {
-                callBack(
-                    it,
-                    mBinding.cardView,
-                    mBinding.imageViewForecastIcon,
-                    mBinding.textViewDayOfWeek,
-                    mBinding.textViewTemp,
-                    mBinding.linearLayoutTempMaxMin
-                )
+                callBack(it)
             }
         }
         return mBinding

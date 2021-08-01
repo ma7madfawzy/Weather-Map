@@ -1,5 +1,6 @@
 package com.app.weather.presentation.home
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -29,7 +30,7 @@ class HomeFragmentViewModel @Inject internal constructor(
     private val getPinnedLocationsUseCase: GetPinnedLocationsUseCase,
     private val networkAvailableCallback: BaseVmFragment.NetworkAvailableCallback
 ) : BaseViewModel() {
-    var pinnedLocations: List<LocationEntity> = emptyList()
+    var pinnedLocations: ObservableField<List<LocationEntity>> = ObservableField(emptyList())
     private lateinit var currentWeatherParams: CurrentWeatherUseCase.CurrentWeatherParams
 
     val currentWeatherViewState: MutableLiveData<BaseViewState<CurrentWeatherEntity>> =
@@ -50,8 +51,8 @@ class HomeFragmentViewModel @Inject internal constructor(
         clearOldLocationsData(clearOldData)
         viewModelScope.launch(Dispatchers.IO) {
             getPinnedLocationsUseCase().collect {
-                pinnedLocations = it
-                pinnedLocations.forEach { requestLocationEntityBasedWeather(it) }
+                pinnedLocations .set(it)
+                pinnedLocations.get()?.forEach { requestLocationEntityBasedWeather(it) }
             }
         }
     }

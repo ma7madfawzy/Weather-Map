@@ -19,7 +19,7 @@
         android:fitsSystemWindows="true"
         app:cardCornerRadius="24dp"
         android:transitionName="card"
-        app:cardElevation="8dp"
+        app:cardElevation="4dp"
         tools:showIn="@layout/fragment_dashboard"
         tools:visibility="invisible">
 

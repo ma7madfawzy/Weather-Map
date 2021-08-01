@@ -46,7 +46,7 @@
                 android:layout_marginTop="24dp"
                 android:text="@{item.getHourOfDay()}"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="10:30" />
 
@@ -57,44 +57,40 @@
                 android:layout_below="@id/textViewTimeOfDay"
                 android:layout_centerHorizontal="true"
                 android:text="@{item.getDay()}"
-                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 android:transitionName="dayOfWeek"
                 tools:text="Sunday" />
 
             <ImageView
-                android:id="@+id/imageViewForecastIcon"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
-                android:layout_margin="8dp"
-                android:layout_below="@id/textViewDayOfWeek"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
-                android:transitionName="forecastIcon"
+                android:id="@+id/imageViewWeatherIcon"
+                android:layout_width="124dp"
+                android:layout_height="124dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="48dp"
                 app:setWeatherIcon="@{item.getWeatherItem().icon}"
-                tools:src="@drawable/ic_splash_big_cloud" />
+                tools:src="@drawable/a10d_svg" />
 
             <TextView
-                android:id="@+id/textViewTemp"
+                android:id="@+id/textViewTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imageViewForecastIcon"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="48dp"
+                android:transitionName="temp"
+                android:layout_marginEnd="36dp"
                 android:text="@{item.main.getTempString()}"
                 android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:transitionName="temp"
-                tools:text="18°" />
-
+                android:textSize="100sp"
+                tools:text="36°" />
             <LinearLayout
                 android:id="@+id/linearLayoutTempMaxMin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewTemp"
+                android:layout_below="@id/textViewTemperature"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal"
                 android:layout_margin="5dp"
@@ -106,7 +102,7 @@
                     android:layout_marginEnd="12dp"
                     android:text="@{item.main.getTempMinString()}"
                     android:textColor="@color/whiteWithHalfOpacity"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     tools:text="39°" />
 
@@ -116,7 +112,7 @@
                     android:layout_marginStart="12dp"
                     android:text="@{item.main.getTempMaxString()}"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     tools:text="22°" />
             </LinearLayout>

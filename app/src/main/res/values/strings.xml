@@ -27,5 +27,6 @@
     <string name="enableGps">please_enable_GPS_to_help_us_find_your_physical_location</string>
     <string name="location_settings">location_settings</string>
     <string name="gps">GPS</string>
+    <string name="add_locations_to_home_screen">Add locations to Home Screen</string>
 
 </resources>

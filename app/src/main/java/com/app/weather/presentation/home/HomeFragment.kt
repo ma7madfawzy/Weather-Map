@@ -13,7 +13,6 @@ import com.app.weather.presentation.core.Constants
 import com.app.weather.presentation.home.pinned_locations.PinnedLocationsAdapter
 import com.app.weather.presentation.main.MainActivity
 import com.app.weather.utils.LocationTracker
-import com.app.weather.utils.extensions.logE
 import com.app.weather.utils.extensions.observeWith
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,15 +27,11 @@ class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, Fragme
     override fun init() {
         super.init()
         initForecastAdapter()
-        sharedElementReturnTransition(android.R.transition.slide_right)
+        sharedElementReturnTransition(android.R.transition.slide_bottom)
         observeCurrentWeatherState()
         observePinnedLocationsState()
+        setAddLocationsToHomeClickListener()
         setCurrentForecastCastClickListener()
-    }
-
-    private fun updateWeatherParam(latLng: AbstractQuery.LatLng) {
-        currentLocation = latLng
-        viewModel.updateWeatherParams(latLng)
     }
 
     override fun onStart() {
@@ -79,6 +74,17 @@ class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, Fragme
         }
         binding.recyclerForecast.adapter = adapter
         handleEnterTransition()
+    }
+    private fun setAddLocationsToHomeClickListener() {
+        binding.chipAdd.setOnClickListener {
+            findNavController()
+                .navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
+        }
+    }
+
+    private fun updateWeatherParam(latLng: AbstractQuery.LatLng) {
+        currentLocation = latLng
+        viewModel.updateWeatherParams(latLng)
     }
 
     private fun setCurrentForecastCastClickListener() {
