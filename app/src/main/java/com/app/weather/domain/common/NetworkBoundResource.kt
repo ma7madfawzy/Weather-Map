@@ -2,7 +2,8 @@ package com.app.weather.domain.common
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import com.app.weather.utils.extensions.logE
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.Single
@@ -10,55 +11,56 @@ import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-abstract class NetworkBoundResource<ResultType, RequestType>
-@MainThread internal constructor(private val shouldFetch:(data: ResultType?) ->Boolean,
-                                 private val loadFromDb:()->LiveData<ResultType>,
-                                 private val fetchFromNetwork:()->Single<RequestType>,
-                                 private val saveCallResult:(item: RequestType)->Unit,
-                                 private val onFetchFailed:()->Unit
-                                 ) {
-    private val result = MediatorLiveData<Resource<ResultType>>()
+abstract class NetworkBoundResource<OfflineResponseType, NetworkResponseType>
+@MainThread internal constructor(
+    shouldFetch: () -> Boolean= { true },
+    private val loadFromDbFlow: () -> Flow<OfflineResponseType>,
+    private val fetchFromNetworkSingle: () -> Single<NetworkResponseType>,
+    private val saveCallResult: (networkResponseType: NetworkResponseType) -> Unit,
+    private val onFetchFailed: () -> Unit
+) {
+    private val result = MutableStateFlow<Resource<OfflineResponseType>>(Resource.loading())
     private var mDisposable: Disposable? = null
-    private var dbSource: LiveData<ResultType>
 
-    internal val asLiveData: LiveData<Resource<ResultType>>
+    internal val asFlow: MutableStateFlow<Resource<OfflineResponseType>>
         get() = result
 
     init {
-        result.value = Resource.loading()
-        @Suppress("LeakingThis")
-        dbSource = loadFromDb()
-        result.addSource(dbSource) { data ->
-            //remove the source when changed
-            result.removeSource(dbSource)
-            if (shouldFetch(data)) fetchFromNetwork(dbSource)
-            else result.setValue(Resource.success(data))
+        if (shouldFetch()) fetchFromNetwork()
+        else fetchOffline()
+    }
+
+    private fun fetchOffline() {
+        CoroutineScope(Dispatchers.IO).launch {
+            loadFromDbFlow().collect { result.value=Resource.success(it) }
         }
     }
 
-    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
-        result.addSource(dbSource) { newData -> result.setValue(Resource.loading(newData)) }
-        fetchFromNetwork()
+    private fun fetchFromNetwork() {
+        fetchFromNetworkSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                object : SingleObserver<RequestType> {
+                object : SingleObserver<NetworkResponseType> {
                     override fun onSubscribe(d: Disposable) {
                         if (!d.isDisposed) mDisposable = d
                     }
 
-                    override fun onSuccess(requestType: RequestType) {
-                        result.removeSource(dbSource)
-                        saveResultAndReInit(requestType)
+                    override fun onSuccess(networkResponseType: NetworkResponseType) {
+                        saveResultAndReInit(networkResponseType)
                     }
 
                     override fun onError(e: Throwable) {
                         onFetchFailed()
-                        result.removeSource(dbSource)
-                        result.addSource(dbSource) { newData ->
-                            result.setValue(Resource.error(e.message.toString(), newData))
-                        }
+                        result.value = Resource.error(e.message.toString())
+                        fetchOffline()
                         mDisposable!!.dispose()
                     }
                 }
@@ -66,9 +68,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     }
 
     @MainThread
-    private fun saveResultAndReInit(response: RequestType) {
+    private fun saveResultAndReInit(networkResponseType: NetworkResponseType) {
         Completable
-            .fromCallable { saveCallResult(response) }
+            .fromCallable { saveCallResult(networkResponseType) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -80,17 +82,13 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                     }
 
                     override fun onComplete() {
-                        result.addSource(loadFromDb()) { newData ->
-                            result.setValue(
-                                Resource.success(
-                                    newData
-                                )
-                            )
-                        }
+                        logE("network fetched data was saved to database successfully")
+                        fetchOffline()
                         mDisposable!!.dispose()
                     }
 
                     override fun onError(e: Throwable) {
+                        logE("Error saving network fetched data to database")
                         mDisposable!!.dispose()
                     }
                 }

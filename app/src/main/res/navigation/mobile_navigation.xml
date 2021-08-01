@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
     app:startDestination="@id/splashFragment">
 
@@ -49,6 +48,9 @@
         <argument
             android:name="weatherItem"
             app:argType="com.app.weather.domain.model.ListItem" />
+        <argument
+            android:name="forecastEntity"
+            app:argType="com.app.weather.data.db.entity.ForecastEntity" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

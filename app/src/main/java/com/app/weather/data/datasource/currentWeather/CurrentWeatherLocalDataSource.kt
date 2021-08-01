@@ -13,8 +13,8 @@ class CurrentWeatherLocalDataSource @Inject constructor(
     private val currentWeatherDao: CurrentWeatherDao
 ) {
 
-    fun getCurrentWeather() = currentWeatherDao.getCurrentWeather()
+    fun getCurrentWeather(lat: Double, lng: Double) = currentWeatherDao.getCurrentWeather(lat, lng)
 
-    fun insertCurrentWeather(currentWeather: CurrentWeatherResponse) =
-        currentWeatherDao.insertCurrentWeather(CurrentWeatherEntity(currentWeather))
+    fun insertCurrentWeather(currentWeather: CurrentWeatherResponse, lat: Double, lon: Double) =
+        currentWeatherDao.insertCurrentWeather(CurrentWeatherEntity(currentWeather,lat,lon))
 }

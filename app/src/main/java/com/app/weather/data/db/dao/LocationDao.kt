@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocationDao {
 
     @Query("SELECT * FROM Locations")
-    fun getAll(): LiveData<List<LocationEntity>>
+    fun getAll(): Flow<List<LocationEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(entity: LocationEntity):Long

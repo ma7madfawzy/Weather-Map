@@ -6,8 +6,8 @@ import com.app.weather.domain.model.SearchResponse
 import com.app.weather.utils.extensions.tryCatch
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Fawzy
@@ -18,8 +18,8 @@ class SearchCitiesRemoteDataSource @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    fun getCityWithQuery(query: String): Single<SearchResponse> {
-        return Single.create { single ->
+    fun getCityWithQuery(query: String): Single<SearchResponse> =
+        Single.create { single ->
             val algoliaQuery = PlacesQuery(query)
                 .setLanguage("en")
                 .setHitsPerPage(25)
@@ -44,5 +44,5 @@ class SearchCitiesRemoteDataSource @Inject constructor(
                 }
             }
         }
-    }
+
 }

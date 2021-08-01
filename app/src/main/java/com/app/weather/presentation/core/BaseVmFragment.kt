@@ -7,6 +7,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.ViewModelProvider
 import com.app.weather.utils.extensions.networkAvailable
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 /**
  * Created by Fawzy

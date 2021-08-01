@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.DiffUtil
 import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.databinding.ItemPinnedLocationBinding
 import com.app.weather.presentation.core.BaseAdapter
+import com.app.weather.utils.extensions.tryCatch
 
 /**
  * Created by Fawzy
  */
 
 class PinnedLocationsAdapter(
-    private val callBack: (CurrentWeatherEntity, Int, View, View) -> Unit
+    private val callBack: (CurrentWeatherEntity, View, View) -> Unit
 ) : BaseAdapter<CurrentWeatherEntity, ItemPinnedLocationBinding>(diffCallback) {
 
     override fun createBinding(parent: ViewGroup, viewType: Int) =
@@ -27,17 +28,16 @@ class PinnedLocationsAdapter(
     override fun bind(binding: ItemPinnedLocationBinding, position: Int) {
         binding.entity = getItem(position)
         binding.cardView.setOnClickListener {
-            callBack(
-                getItem(position), position, binding.cardView,
-                binding.textViewTemp
-            )
+            callBack(getItem(position), binding.cardView, binding.textViewTemp)
         }
         binding.executePendingBindings()
     }
 
     fun clearData() {
-        currentList.clear()
-        notifyDataSetChanged()
+        tryCatch({
+            currentList.clear()
+            notifyDataSetChanged()
+        })
     }
 }
 

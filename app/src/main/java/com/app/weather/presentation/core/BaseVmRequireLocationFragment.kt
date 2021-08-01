@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
@@ -25,34 +24,28 @@ abstract class BaseVmRequireLocationFragment<VM : BaseViewModel, DB : ViewDataBi
     @LayoutRes private val layoutResId: Int,
     viewModelClass: Class<VM>
 ) : BaseVmFragment<VM, DB>(layoutResId, viewModelClass) {
-    companion object {
-        const val REQUEST_CODE_LOCATION = 1
-    }
 
     private var requiredPermissionGranted = false
     private var mLocationTracker: LocationTracker? = null
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         checkRequiredPermissions()
-        setupLocationTracker()
     }
 
     private fun checkRequiredPermissions() {
-        val notGranted1 = ActivityCompat.checkSelfPermission(
-            requireActivity(),
-            ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-        val notGranted2 = ActivityCompat.checkSelfPermission(
-            requireActivity(),
-            ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
+        val accessFineLocationGranted = ActivityCompat.checkSelfPermission(
+            requireActivity(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val accessCoarseLocationGranted = ActivityCompat.checkSelfPermission(
+            requireActivity(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-        if (notGranted1 && notGranted2) {
+        if (!accessFineLocationGranted || !accessCoarseLocationGranted) {
             requiredPermissionGranted = false
             requestMultiplePermissions.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
-        } else requiredPermissionGranted = true
+        } else {
+            requiredPermissionGranted = true
+            setupLocationTracker()
+        }
     }
 
     private val requestMultiplePermissions =
@@ -60,21 +53,17 @@ abstract class BaseVmRequireLocationFragment<VM : BaseViewModel, DB : ViewDataBi
             if (permissions[ACCESS_FINE_LOCATION] == true && permissions[ACCESS_COARSE_LOCATION] == true) {
                 requiredPermissionGranted = true
                 setupLocationTracker()
-            } else  checkRequiredPermissions()
+            } else checkRequiredPermissions()
         }
+
     //----------------------------------------------------------------------------------------------
-
-    override fun onStart() {
-        super.onStart()
-        checkRequiredPermissions()
-    }
-
     private fun showEnableGPSAlert() {
         val alertDialog = AlertDialog.Builder(requireContext())
         alertDialog.apply {
             setTitle(R.string.requireGps)
-            setPositiveButton(R.string.ok) { _, _ ->
+            setPositiveButton(R.string.ok) { dialogInterface, _ ->
                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                dialogInterface.dismiss()
             }
             setNegativeButton(R.string.negative) { _, _ -> }
         }.create().show()

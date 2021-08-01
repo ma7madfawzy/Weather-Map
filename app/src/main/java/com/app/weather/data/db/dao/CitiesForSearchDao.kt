@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.app.weather.data.db.entity.CitiesForSearchEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Fawzy
@@ -15,12 +16,12 @@ import com.app.weather.data.db.entity.CitiesForSearchEntity
 interface CitiesForSearchDao {
 
     @Query("SELECT * FROM CitiesForSearch")
-    fun getCities(): LiveData<List<CitiesForSearchEntity>>
+    fun getCities(): Flow<List<CitiesForSearchEntity>>
 
     @Query(
         "SELECT * FROM CitiesForSearch WHERE fullName like '%' || :city || '%'|| '%' ORDER BY fullName DESC"
     )
-    fun getCityByName(city: String? = ""): LiveData<List<CitiesForSearchEntity>>
+    fun getCityByName(city: String? = ""): Flow<List<CitiesForSearchEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCity(citiesForSearchEntity: CitiesForSearchEntity)

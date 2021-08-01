@@ -42,7 +42,7 @@ class ForecastAdapter(
     }
 
     override fun bind(binding: ItemForecastBinding, position: Int) {
-        (binding as ItemForecastBinding).viewModel?.item?.set(getItem(position))
+        binding.viewModel?.item?.set(getItem(position))
         binding.executePendingBindings()
     }
 }

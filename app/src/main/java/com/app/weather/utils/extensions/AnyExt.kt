@@ -8,7 +8,7 @@ import android.text.style.*
 import android.util.Log
 import timber.log.Timber
 
-fun Any.logE(message: String) = Timber.e(this::class.java.simpleName, message)
+fun Any.logE(message: String) = Log.e(this::class.java.simpleName, message)
 
 fun Any.logD(message: String) = Timber.d(this::class.java.simpleName, message)
 

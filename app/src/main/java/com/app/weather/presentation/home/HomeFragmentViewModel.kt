@@ -1,9 +1,9 @@
 package com.app.weather.presentation.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
+import com.algolia.search.saas.AbstractQuery
 import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.data.db.entity.LocationEntity
 import com.app.weather.domain.usecase.CurrentWeatherUseCase
@@ -12,8 +12,11 @@ import com.app.weather.presentation.core.BaseViewModel
 import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.BaseVmFragment
 import com.app.weather.presentation.core.Constants
-import com.algolia.search.saas.AbstractQuery
+import com.app.weather.utils.extensions.logE
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -27,48 +30,60 @@ class HomeFragmentViewModel @Inject internal constructor(
     private val networkAvailableCallback: BaseVmFragment.NetworkAvailableCallback
 ) : BaseViewModel() {
     var pinnedLocations: List<LocationEntity> = emptyList()
-    private val currentWeatherParams: MutableLiveData<CurrentWeatherUseCase.CurrentWeatherParams> =
+    private lateinit var currentWeatherParams: CurrentWeatherUseCase.CurrentWeatherParams
+
+    val currentWeatherViewState: MutableLiveData<BaseViewState<CurrentWeatherEntity>> =
         MutableLiveData()
 
-    val currentWeatherViewState: LiveData<BaseViewState<CurrentWeatherEntity>> =
-        currentWeatherParams.switchMap { currentWeatherUseCase(it) }
+    val pinnedLocationsWeatherViewState: MediatorLiveData<ArrayList<CurrentWeatherEntity>> =
+        MediatorLiveData()
 
-    val pinnedLocationsWeatherViewState:
-            MediatorLiveData<ArrayList<CurrentWeatherEntity>> = MediatorLiveData()
-
-    fun fetchPinnedLocations() {
-        val dataSource = getPinnedLocationsUseCase()
-        pinnedLocationsWeatherViewState.addSource(dataSource) {
-            pinnedLocationsWeatherViewState.removeSource(dataSource)
-            onPinnedLocationLoaded(it)
+    private fun requestCurrentWeather() {
+        viewModelScope.launch(Dispatchers.IO) {
+            currentWeatherUseCase(currentWeatherParams).collect {
+                currentWeatherViewState.postValue(it)
+            }
         }
     }
 
-    private fun onPinnedLocationLoaded(list: List<LocationEntity>) {
-        pinnedLocations = list
-        pinnedLocations.forEach { getLocationEntityBasedWeather(it) }
+    fun requestPinnedLocations(clearOldData: Boolean) {
+        clearOldLocationsData(clearOldData)
+        viewModelScope.launch(Dispatchers.IO) {
+            getPinnedLocationsUseCase().collect {
+                pinnedLocations = it
+                pinnedLocations.forEach { requestLocationEntityBasedWeather(it) }
+            }
+        }
     }
 
-    private fun getLocationEntityBasedWeather(locationEntity: LocationEntity) {
-        val source = currentWeatherUseCase(getWeatherParams(locationEntity.latLang()))
-        pinnedLocationsWeatherViewState.addSource(source) {
-            if (!it.isLoading()) {
-                pinnedLocationsWeatherViewState.removeSource(source)
-                val oldWeatherEntityStateListData: ArrayList<CurrentWeatherEntity> = ArrayList(
-                    pinnedLocationsWeatherViewState.value ?: emptyList<CurrentWeatherEntity>()
-                )
-                it.data?.let { weatherEntity ->
-                    oldWeatherEntityStateListData.add(weatherEntity)
+    private fun clearOldLocationsData(clearOldData: Boolean) {
+        if (clearOldData)
+            pinnedLocationsWeatherViewState.value = ArrayList()
+    }
+
+
+    private fun requestLocationEntityBasedWeather(locationEntity: LocationEntity) {
+        logE("lat: for pinned ${locationEntity.lat}, long: ${locationEntity.lng}")
+        viewModelScope.launch(Dispatchers.IO) {
+            currentWeatherUseCase(getWeatherParams(locationEntity.latLang())).collect {
+                if (!it.isLoading()) {
+                    val oldWeatherEntityStateListData: ArrayList<CurrentWeatherEntity> = ArrayList(
+                        pinnedLocationsWeatherViewState.value ?: emptyList<CurrentWeatherEntity>()
+                    )
+                    it.data?.let { weatherEntity ->
+                        oldWeatherEntityStateListData.add(weatherEntity)
+                    }
+                    pinnedLocationsWeatherViewState.postValue(oldWeatherEntityStateListData)
                 }
-                pinnedLocationsWeatherViewState.postValue(oldWeatherEntityStateListData)
             }
         }
     }
 
     fun updateWeatherParams(latLng: AbstractQuery.LatLng) {
-        setCurrentWeatherParams(
-            getWeatherParams(latLng)
-        )
+        val params=getWeatherParams(latLng)
+        currentWeatherParams = params
+        requestCurrentWeather()
+        logE("lat: for current ${latLng.lat} , long: ${latLng.lng}")
     }
 
     private fun getWeatherParams(latLng: AbstractQuery.LatLng) =
@@ -76,17 +91,4 @@ class HomeFragmentViewModel @Inject internal constructor(
             latLng.lat, latLng.lng,
             networkAvailableCallback.isNetworkAvailable(), Constants.Coords.METRIC
         )
-
-    private fun setCurrentWeatherParams(params: CurrentWeatherUseCase.CurrentWeatherParams) {
-        if (currentWeatherParams.value == params) return
-        currentWeatherParams.postValue(params)
-    }
-
-    fun getLatByPosition(pos: Int): Double {
-        return pinnedLocations[pos].lat ?: 0.0
-    }
-
-    fun getLngByPosition(pos: Int): Double {
-        return pinnedLocations[pos].lng ?: 0.0
-    }
 }

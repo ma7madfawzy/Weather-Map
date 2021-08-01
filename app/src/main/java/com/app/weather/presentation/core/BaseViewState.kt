@@ -1,6 +1,7 @@
 package com.app.weather.presentation.core
 
 import com.app.weather.data.db.entity.CurrentWeatherEntity
+import com.app.weather.data.db.entity.ForecastEntity
 import com.app.weather.domain.common.Resource
 import com.app.weather.domain.common.Status
 

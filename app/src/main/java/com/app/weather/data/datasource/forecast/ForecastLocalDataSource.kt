@@ -11,9 +11,8 @@ import javax.inject.Inject
 
 class ForecastLocalDataSource @Inject constructor(private val forecastDao: ForecastDao) {
 
-    fun getForecast() = forecastDao.getForecast()
+    fun getForecast(lat: Double, lng: Double) = forecastDao.getForecast(lat,lng)
 
-    fun insertForecast(forecast: ForecastResponse) = forecastDao.deleteAndInsert(
-        ForecastEntity(forecast)
-    )
+    fun insertForecast(forecast: ForecastResponse, lat: Double, lng: Double) =
+        forecastDao.insertForecast(ForecastEntity(forecast, lat, lng))
 }

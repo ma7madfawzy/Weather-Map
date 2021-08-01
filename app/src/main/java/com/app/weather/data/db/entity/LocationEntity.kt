@@ -17,9 +17,9 @@ data class LocationEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var id: Long,
-    @ColumnInfo(name = "lat")
+    @ColumnInfo(name = "locationLat")
     var lat: Double?,
-    @ColumnInfo(name = "lng")
+    @ColumnInfo(name = "locationLon")
     var lng: Double?,
 ) : Parcelable {
 

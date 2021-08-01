@@ -16,24 +16,23 @@ class WeatherDetailFragment : BaseVmFragment<WeatherDetailViewModel, FragmentWea
     R.layout.fragment_weather_detail,
     WeatherDetailViewModel::class.java,
 ) {
-    private val weatherDetailFragmentArgs: WeatherDetailFragmentArgs by navArgs()
 
     override fun init() {
         super.init()
-        binding.viewModel?.weatherItem?.set(weatherDetailFragmentArgs.weatherItem)
-        binding.viewModel?.selectedDayDate =
-            weatherDetailFragmentArgs.weatherItem.dtTxt?.substringBefore(" ")
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.slide_bottom)
+
+        val args: WeatherDetailFragmentArgs by navArgs()
+        viewModel.initWithArgs(args)
 
         observeSelectedDayForecast()
 
         binding.fabClose.setOnClickListener { findNavController().popBackStack() }
 
-        sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     private fun observeSelectedDayForecast() {
-        binding.viewModel?.selectedDayForecastLiveData?.observeWith(viewLifecycleOwner)
+        viewModel.selectedDayForecastLiveData.observeWith(viewLifecycleOwner)
         { initWeatherHourOfDayAdapter(it) }
     }
 

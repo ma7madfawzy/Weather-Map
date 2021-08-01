@@ -5,11 +5,11 @@ import android.os.Parcelable
 import androidx.room.*
 import com.app.weather.domain.model.CurrentWeatherResponse
 import com.app.weather.domain.model.WeatherItem
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlinx.parcelize.Parcelize
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Fawzy
@@ -38,10 +38,14 @@ data class CurrentWeatherEntity(
     @ColumnInfo(name = "base")
     val base: String?,
     @Embedded
-    val wind: WindEntity?
+    val wind: WindEntity?,
+    @ColumnInfo(name = "weatherLat")
+    val lat: Double?,
+    @ColumnInfo(name = "weatherLon")
+    val lng: Double?
 ) : Parcelable {
     @Ignore
-    constructor(currentWeather: CurrentWeatherResponse) : this(
+    constructor(currentWeather: CurrentWeatherResponse, lat: Double, lng: Double) : this(
         visibility = currentWeather.visibility,
         timezone = currentWeather.timezone,
         main = MainEntity(currentWeather.main),
@@ -51,7 +55,9 @@ data class CurrentWeatherEntity(
         name = currentWeather.name,
         id = 0,
         base = currentWeather.base,
-        wind = WindEntity(currentWeather.wind)
+        wind = WindEntity(currentWeather.wind),
+        lat = lat,
+        lng = lng
     )
 
     fun getCurrentWeather(): WeatherItem? {

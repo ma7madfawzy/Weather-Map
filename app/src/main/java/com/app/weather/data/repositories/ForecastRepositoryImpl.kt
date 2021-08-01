@@ -1,15 +1,15 @@
 package com.app.weather.data.repositories
 
-import androidx.lifecycle.LiveData
 import com.app.weather.data.datasource.forecast.ForecastLocalDataSource
 import com.app.weather.data.datasource.forecast.ForecastRemoteDataSource
 import com.app.weather.data.db.entity.ForecastEntity
-import com.app.weather.domain.model.ForecastResponse
-import com.app.weather.domain.repositories.ForecastRepository
 import com.app.weather.domain.common.NetworkBoundResource
-import com.app.weather.presentation.core.Constants.NetworkService.RATE_LIMITER_TYPE
 import com.app.weather.domain.common.RateLimiter
 import com.app.weather.domain.common.Resource
+import com.app.weather.domain.model.ForecastResponse
+import com.app.weather.domain.repositories.ForecastRepository
+import com.app.weather.presentation.core.Constants.NetworkService.RATE_LIMITER_TYPE
+import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -24,15 +24,15 @@ class ForecastRepositoryImpl @Inject constructor(
 
     private val forecastListRateLimit = RateLimiter<String>(30, TimeUnit.SECONDS)
 
-    override fun loadForecastByCoord(lat: Double, lon: Double, fetchRequired: Boolean, units: String)
-            : LiveData<Resource<ForecastEntity>> {
+    override fun loadForecast(lat: Double, lon: Double, fetchRequired: Boolean, units: String)
+            : StateFlow<Resource<ForecastEntity>> {
         return object :
             NetworkBoundResource<ForecastEntity, ForecastResponse>(
                 shouldFetch = { fetchRequired },
-                loadFromDb = { forecastLocalDataSource.getForecast() },
-                fetchFromNetwork = { forecastRemoteDataSource.getForecastByGeoCords(lat, lon, units) },
-                saveCallResult = { forecastLocalDataSource.insertForecast(it) },
+                loadFromDbFlow = { forecastLocalDataSource.getForecast(lat, lon) },
+                fetchFromNetworkSingle = { forecastRemoteDataSource.getForecast(lat, lon, units) },
+                saveCallResult = { forecastLocalDataSource.insertForecast(it, lat, lon) },
                 onFetchFailed = { forecastListRateLimit.reset(RATE_LIMITER_TYPE) }
-            ) {}.asLiveData
+            ) {}.asFlow
     }
 }

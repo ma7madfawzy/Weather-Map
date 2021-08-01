@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.app.weather.data.db.dao.CitiesForSearchDao
 import com.app.weather.data.db.entity.CitiesForSearchEntity
 import com.app.weather.domain.model.SearchResponse
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
@@ -14,7 +15,7 @@ class SearchCitiesLocalDataSource @Inject constructor(
     private val citiesForSearchDao: CitiesForSearchDao
 ) {
 
-    fun getCityByName(cityName: String?): LiveData<List<CitiesForSearchEntity>> =
+    fun getCityByName(cityName: String?): Flow<List<CitiesForSearchEntity>> =
         citiesForSearchDao.getCityByName(
             cityName
         )

@@ -11,6 +11,7 @@ import com.app.weather.presentation.dashboard.DashboardFragmentDirections
 import com.app.weather.presentation.main.MainActivity
 import com.app.weather.presentation.search.result.SearchResultAdapter
 import com.app.weather.utils.extensions.hideKeyboard
+import com.app.weather.utils.extensions.logE
 import com.app.weather.utils.extensions.observeWith
 import com.app.weather.utils.extensions.queryTextListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +29,7 @@ class SearchFragment : BaseVmFragment<SearchViewModel, FragmentSearchBinding>(
     }
 
     private fun observeSearchViewStateData() {
-        binding.viewModel?.viewState?.observeWith(
+        viewModel.viewState.observeWith(
             viewLifecycleOwner
         ) {
             binding.viewState = it
@@ -39,7 +40,7 @@ class SearchFragment : BaseVmFragment<SearchViewModel, FragmentSearchBinding>(
     private fun initSearchView() {
         val searchViewSearchIcon = binding.searchView.findViewById<ImageView>(R.id.search_mag_icon)
         searchViewSearchIcon.setImageResource(R.drawable.ic_search)
-        val queryTextChange: (newText: String) -> Unit = { binding.viewModel?.onTextChange(it) }
+        val queryTextChange: (newText: String) -> Unit = { viewModel.onTextChange(it) }
         binding.searchView.queryTextListener(
             onQueryTextSubmit = queryTextChange,
             onQueryTextChange = queryTextChange
@@ -50,8 +51,10 @@ class SearchFragment : BaseVmFragment<SearchViewModel, FragmentSearchBinding>(
         val adapter = SearchResultAdapter { item ->
             item.coord?.let {
                 binding.searchView.hideKeyboard((activity as MainActivity))
+                logE("lat: onclick ${it.lat}, long ${it.lon}")
                 findNavController()
-                    .navigate(SearchFragmentDirections.actionSearchFragmentToDashboardFragment(false,it.lat?:0.0,it.lon?:0.0))
+                    .navigate(SearchFragmentDirections.actionSearchFragmentToDashboardFragment
+                        (false,it.lat?:0.0,it.lon?:0.0))
             }
         }
 

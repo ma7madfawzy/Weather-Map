@@ -18,6 +18,7 @@
         android:backgroundTint="@{entity.getColor()}"
         android:fitsSystemWindows="true"
         app:cardCornerRadius="24dp"
+        android:transitionName="card"
         app:cardElevation="8dp"
         tools:showIn="@layout/fragment_dashboard"
         tools:visibility="invisible">
@@ -42,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="48dp"
+                android:transitionName="temp"
                 android:layout_marginEnd="36dp"
                 android:text="@{entity.main.getTempString()}"
                 android:textColor="@color/white"

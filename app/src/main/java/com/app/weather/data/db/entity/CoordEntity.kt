@@ -15,9 +15,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "Coord")
 data class CoordEntity(
-    @ColumnInfo(name = "lon")
+    @ColumnInfo(name = "CoordLat")
     val lon: Double?,
-    @ColumnInfo(name = "lat")
+    @ColumnInfo(name = "coordLon")
     val lat: Double?
 ) : Parcelable {
     @Ignore

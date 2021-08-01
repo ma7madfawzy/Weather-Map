@@ -22,7 +22,4 @@ data class WeatherItem(
     val id: Int?
 ) : Parcelable {
 
-    fun getDescriptionText(): String? {
-        return description?.capitalize()
-    }
 }

@@ -9,6 +9,7 @@ import com.app.weather.domain.model.ListItem
 import com.app.weather.presentation.core.BaseVmFragment
 import com.app.weather.presentation.dashboard.forecast.ForecastAdapter
 import com.app.weather.presentation.main.MainActivity
+import com.app.weather.utils.extensions.logE
 import com.app.weather.utils.extensions.observeWith
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +18,6 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
     R.layout.fragment_dashboard,
     DashboardFragmentViewModel::class.java,
 ) {
-    private val args: DashboardFragmentArgs by navArgs()
     override fun init() {
         super.init()
         initForecastAdapter()
@@ -25,24 +25,26 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
 
         observeForecastState()
         observeCurrentWeatherState()
+        val args: DashboardFragmentArgs by navArgs()
         viewModel.updateParams(args.lat, args.lng).isPinned.set(args.isPinned)
-
+        logE("lat: in args: ${args.lat}, long: ${args.lng}")
     }
 
-
     private fun observeCurrentWeatherState() {
-        binding.viewModel?.currentWeatherViewState?.observeWith(
+        viewModel.currentWeatherViewState.observeWith(
             viewLifecycleOwner
         ) {
             with(binding) {
                 currentWeatherViewState = it
                 containerForecast.entity = it.data
+                containerForecast.textViewTemperature.text = it.data?.main?.getTempString()
+                invalidateAll()
             }
         }
     }
 
     private fun observeForecastState() {
-        binding.viewModel?.forecastViewState?.observeWith(viewLifecycleOwner) {
+        viewModel.forecastViewState.observeWith(viewLifecycleOwner) {
             binding.viewState = it
             it.data?.list?.let { forecasts -> updateAdapter(forecasts) }
             (activity as MainActivity).setToolbarTitle(
@@ -56,13 +58,12 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
         val adapter = ForecastAdapter { item, cardView, forecastIcon, dayOfWeek, temp, tempMaxMin ->
             findNavController()
                 .navigate(
-                    DashboardFragmentDirections.actionDashboardFragmentToWeatherDetailFragment(item),
+                    DashboardFragmentDirections.actionDashboardFragmentToWeatherDetailFragment(
+                        item, viewModel.forecastViewState.value?.data!!
+                    ),
                     getWeatherDetailsSharedElementsExtras(
-                        cardView,
-                        forecastIcon,
-                        dayOfWeek,
-                        temp,
-                        tempMaxMin
+                        cardView, forecastIcon, dayOfWeek,
+                        temp, tempMaxMin
                     )
                 )
         }

@@ -1,5 +1,6 @@
 package com.app.weather.presentation.core
 
+import android.app.Activity
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -13,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.weather.R
 import com.app.weather.utils.extensions.hide
+import com.app.weather.utils.extensions.hideKeyboard
 import com.app.weather.utils.extensions.show
+import com.app.weather.utils.extensions.showKeyboard
 import com.squareup.picasso.Picasso
 
 /**

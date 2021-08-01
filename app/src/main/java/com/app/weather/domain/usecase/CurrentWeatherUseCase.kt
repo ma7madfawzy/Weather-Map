@@ -1,12 +1,11 @@
 package com.app.weather.domain.usecase
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.domain.repositories.CurrentWeatherRepository
 import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.Constants
-import com.app.weather.domain.common.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -17,7 +16,7 @@ class CurrentWeatherUseCase @Inject internal constructor(
     private val repository: CurrentWeatherRepository
 ) {
 
-    operator fun invoke(params: CurrentWeatherParams?): LiveData<BaseViewState<CurrentWeatherEntity>> {
+    operator fun invoke(params: CurrentWeatherParams?): Flow<BaseViewState<CurrentWeatherEntity>> {
         return repository.loadCurrentWeatherByGeoCords(
             params?.lat ?: 0.0,
             params?.lon ?: 0.0,

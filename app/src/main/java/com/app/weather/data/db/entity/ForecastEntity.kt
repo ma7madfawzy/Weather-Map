@@ -13,22 +13,21 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "Forecast")
 data class ForecastEntity(
-
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var id: Int,
-
     @Embedded
     var city: CityEntity?,
-
     @ColumnInfo(name = "list")
-    var list: List<ListItem>?
+    var list: List<ListItem>?,
+    @ColumnInfo(name = "forecastLat")
+    val lat: Double?,
+    @ColumnInfo(name = "forecastLon")
+    val lng: Double?
 ) : Parcelable {
 
     @Ignore
-    constructor(forecastResponse: ForecastResponse) : this(
-        id = 0,
-        city = forecastResponse.city?.let { CityEntity(it) },
-        list = forecastResponse.list
+    constructor(forecastResponse: ForecastResponse,lat: Double, lng: Double) : this(
+        0, forecastResponse.city?.let { CityEntity(it) }, forecastResponse.list, lat,lng
     )
 }

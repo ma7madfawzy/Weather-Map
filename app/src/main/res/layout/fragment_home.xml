@@ -12,10 +12,6 @@
             type="com.app.weather.presentation.home.HomeFragmentViewModel" />
 
         <variable
-            name="currentWeatherViewState"
-            type="com.app.weather.presentation.core.BaseViewState&lt;com.app.weather.data.db.entity.CurrentWeatherEntity&gt;" />
-
-        <variable
             name="viewState"
             type="com.app.weather.presentation.core.BaseViewState&lt;com.app.weather.data.db.entity.ForecastEntity&gt;" />
     </data>
@@ -53,7 +49,7 @@
 
                 <include
                     android:id="@+id/container_forecast"
-                    layout="@layout/layout_dashboard_forecast"
+                    layout="@layout/layout_home_forecast"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/chipToday"
@@ -87,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_below="@id/textViewForecastHeader"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:orientation="horizontal"
                     app:setLayoutManager="@{LinearLayoutManager.HORIZONTAL}"

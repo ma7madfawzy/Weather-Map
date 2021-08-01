@@ -1,13 +1,13 @@
 package com.app.weather.domain.usecase
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import com.app.weather.data.db.entity.ForecastEntity
+import com.app.weather.domain.common.Resource
 import com.app.weather.domain.repositories.ForecastRepository
 import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.Constants
 import com.app.weather.presentation.dashboard.ForecastMapper
-import com.app.weather.domain.common.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -16,22 +16,17 @@ import javax.inject.Inject
 
 class ForecastUseCase @Inject internal constructor(private val repository: ForecastRepository) {
 
-    operator fun invoke(params: CurrentWeatherUseCase.CurrentWeatherParams?): LiveData<BaseViewState<ForecastEntity>> {
-        return repository.loadForecastByCoord(
-            params?.lat?.toDouble() ?: 0.0,
-            params?.lon?.toDouble() ?: 0.0,
+    operator fun invoke(
+        params: CurrentWeatherUseCase.CurrentWeatherParams?)
+    : Flow<BaseViewState<ForecastEntity>> {
+        return repository.loadForecast(
+            params?.lat ?: 0.0,
+            params?.lon ?: 0.0,
             params?.fetchRequired
                 ?: false,
             units = params?.units ?: Constants.Coords.METRIC
         ).map {
-            onForecastResultReady(it)
+            BaseViewState(it)
         }
-    }
-
-    private fun onForecastResultReady(resource: Resource<ForecastEntity>): BaseViewState<ForecastEntity> {
-        val mappedList = resource.data?.list?.let { ForecastMapper().mapFrom(it) }
-        resource.data?.list = mappedList
-
-        return BaseViewState(resource)
     }
 }

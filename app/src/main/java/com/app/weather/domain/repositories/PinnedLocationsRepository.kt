@@ -3,11 +3,12 @@ package com.app.weather.domain.repositories
 import androidx.lifecycle.LiveData
 import com.app.weather.data.db.entity.LocationEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 
 interface PinnedLocationsRepository {
 
-    fun getAll(): LiveData<List<LocationEntity>>
+    fun getAll(): Flow<List<LocationEntity>>
 
     fun insert(entity: LocationEntity):Long
 
