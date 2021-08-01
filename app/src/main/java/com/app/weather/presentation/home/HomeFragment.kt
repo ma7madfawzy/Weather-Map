@@ -36,7 +36,6 @@ class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, Fragme
 
     private fun updateWeatherParam(latLng: AbstractQuery.LatLng) {
         currentLocation = latLng
-        logE("lat: onLocationResult + ${currentLocation.lat}, long: ${currentLocation.lng}")
         viewModel.updateWeatherParams(latLng)
     }
 

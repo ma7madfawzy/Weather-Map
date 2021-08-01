@@ -1,9 +1,8 @@
 package com.app.weather.domain.repositories
 
-import androidx.lifecycle.LiveData
+import com.algolia.search.saas.AbstractQuery
 import com.app.weather.data.db.entity.LocationEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 
 interface PinnedLocationsRepository {
@@ -12,9 +11,7 @@ interface PinnedLocationsRepository {
 
     fun insert(entity: LocationEntity):Long
 
-    fun deleteAndInsert(entity: LocationEntity)
-
-    fun delete(entity: LocationEntity)
+    fun delete(latLng: AbstractQuery.LatLng)
 
     fun getCount(): Int
 }

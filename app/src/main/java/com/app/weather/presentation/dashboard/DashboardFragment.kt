@@ -20,33 +20,21 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
 ) {
     override fun init() {
         super.init()
+        binding.viewModel=viewModel
         initForecastAdapter()
         sharedElementReturnTransition(android.R.transition.move)
 
         observeForecastState()
-        observeCurrentWeatherState()
         val args: DashboardFragmentArgs by navArgs()
         viewModel.updateParams(args.lat, args.lng).isPinned.set(args.isPinned)
-        logE("lat: in args: ${args.lat}, long: ${args.lng}")
     }
 
-    private fun observeCurrentWeatherState() {
-        viewModel.currentWeatherViewState.observeWith(
-            viewLifecycleOwner
-        ) {
-            with(binding) {
-                currentWeatherViewState = it
-                containerForecast.entity = it.data
-                containerForecast.textViewTemperature.text = it.data?.main?.getTempString()
-                invalidateAll()
-            }
-        }
-    }
 
     private fun observeForecastState() {
         viewModel.forecastViewState.observeWith(viewLifecycleOwner) {
             binding.viewState = it
-            it.data?.list?.let { forecasts -> updateAdapter(forecasts) }
+            binding.container.item = it.data?.list?.get(0)
+            updateAdapter(it.data?.list?.subList(1, it.data.list!!.size))
             (activity as MainActivity).setToolbarTitle(
                 it.data?.city?.getCityAndCountry()
             )
@@ -94,7 +82,7 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
     )
 
 
-    private fun updateAdapter(list: List<ListItem>) {
+    private fun updateAdapter(list: List<ListItem>?) {
         (binding.recyclerForecast.adapter as ForecastAdapter).submitList(list)
     }
 }

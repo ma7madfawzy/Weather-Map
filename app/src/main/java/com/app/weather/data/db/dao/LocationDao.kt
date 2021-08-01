@@ -1,6 +1,5 @@
 package com.app.weather.data.db.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.app.weather.data.db.entity.LocationEntity
 import kotlinx.coroutines.flow.Flow
@@ -16,16 +15,10 @@ interface LocationDao {
     fun getAll(): Flow<List<LocationEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(entity: LocationEntity):Long
+    fun insert(entity: LocationEntity): Long
 
-    @Transaction
-    fun deleteAndInsert(entity: LocationEntity) {
-        delete(entity)
-        insert(entity)
-    }
-
-    @Delete
-    fun delete(entity: LocationEntity)
+    @Query("DELETE FROM Locations WHERE locationLat like :lat and locationLon LIKE:lng")
+    fun delete(lat: Double, lng: Double)
 
     @Query("Select count(*) from Locations")
     fun getCount(): Int

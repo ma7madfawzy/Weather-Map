@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+        <variable 
+            name="item"
+            type="com.app.weather.domain.model.ListItem" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="@{item.getColor()}"
+        android:clickable="true"
+        android:focusable="true"
+        android:transitionName="card"
+        app:cardCornerRadius="24dp"
+        tools:showIn="@layout/fragment_dashboard"
+        tools:backgroundTint="@android:color/holo_orange_dark">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="170dp"
+                android:layout_height="124dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="-40dp"
+                android:src="@drawable/ic_splash_big_cloud" />
+
+            <TextView
+                android:id="@+id/textViewTimeOfDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"
+                android:text="@{item.getHourOfDay()}"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="10:30" />
+
+            <TextView
+                android:id="@+id/textViewDayOfWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewTimeOfDay"
+                android:layout_centerHorizontal="true"
+                android:text="@{item.getDay()}"
+                android:layout_margin="5dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:transitionName="dayOfWeek"
+                tools:text="Sunday" />
+
+            <ImageView
+                android:id="@+id/imageViewForecastIcon"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_margin="8dp"
+                android:layout_below="@id/textViewDayOfWeek"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:transitionName="forecastIcon"
+                app:setWeatherIcon="@{item.getWeatherItem().icon}"
+                tools:src="@drawable/ic_splash_big_cloud" />
+
+            <TextView
+                android:id="@+id/textViewTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageViewForecastIcon"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
+                android:text="@{item.main.getTempString()}"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:transitionName="temp"
+                tools:text="18°" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutTempMaxMin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewTemp"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal"
+                android:layout_margin="5dp"
+                android:transitionName="tempMaxMin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:text="@{item.main.getTempMinString()}"
+                    android:textColor="@color/whiteWithHalfOpacity"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="39°" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@{item.main.getTempMaxString()}"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="22°" />
+            </LinearLayout>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

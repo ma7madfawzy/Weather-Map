@@ -13,9 +13,6 @@
             name="viewModel"
             type="com.app.weather.presentation.dashboard.DashboardFragmentViewModel" />
 
-        <variable
-            name="currentWeatherViewState"
-            type="com.app.weather.presentation.core.BaseViewState&lt;com.app.weather.data.db.entity.CurrentWeatherEntity&gt;" />
 
         <variable
             name="viewState"
@@ -26,91 +23,83 @@
     <RelativeLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/white"
         android:fitsSystemWindows="true"
         tools:context=".presentation.dashboard.DashboardFragment">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@android:color/white">
+            app:visibility="@{!viewState.isLoading()}">
 
-            <RelativeLayout
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipToday"
                 android:layout_width="wrap_content"
-                android:visibility="@{viewState.isLoading() ? View.INVISIBLE : View.VISIBLE}"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:checkable="false"
+                android:checked="true"
+                android:clickable="false"
+                android:text="@string/today"
+                android:textColor="@color/chipTextColor"
+                app:chipBackgroundColor="@color/chipItemBackgroundColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipToday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:checkable="false"
-                    android:checked="true"
-                    android:clickable="false"
-                    android:text="@string/today"
-                    android:textColor="@color/chipTextColor"
-                    app:chipBackgroundColor="@color/chipItemBackgroundColor" />
+            <ImageView
+                android:id="@+id/pinLocationIV"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp"
+                android:onClick="@{v->viewModel.onPinLocationClicked()}"
+                android:src="@drawable/ic_pin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/chipToday"
+                app:tint="@{viewModel.isPinned?@color/colorAccent:@color/mainTextColor}"
+                tools:src="@drawable/ic_pin" />
 
-                <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="48dp"
-                    android:layout_marginEnd="36dp"
-                    android:onClick="@{v->viewModel.onPinLocationClicked()}"
-                    android:src="@drawable/ic_pin"
-                    app:tint="@{viewModel.isPinned?currentWeatherViewState.data.getColor():@color/mainTextColor}"
-                    tools:src="@drawable/a10d_svg" />
+            <include
+                android:id="@+id/container"
+                layout="@layout/layout_dashboard_card"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintBottom_toTopOf="@id/textViewForecastHeader"
+                app:layout_constraintTop_toBottomOf="@id/pinLocationIV" />
 
-                <include
-                    android:id="@+id/container_forecast"
-                    layout="@layout/layout_home_forecast"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/chipToday"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="32dp"
-                     />
+            <TextView
+                android:id="@+id/textViewForecastHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/next_5_days"
+                android:textColor="@color/mainTextColor"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/recyclerForecast"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    app:visibility="@{viewState.isLoading()}" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerForecast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:setLayoutManager="@{LinearLayoutManager.HORIZONTAL}"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_forecast" />
 
-                <TextView
-                    android:id="@+id/textViewForecastHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/container_forecast"
-                    android:layout_marginStart="16dp"
-                    android:text="@string/next_5_days"
-                    android:textColor="@color/mainTextColor"
-                    android:textSize="19sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerForecast"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewForecastHeader"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="horizontal"
-                    app:setLayoutManager="@{LinearLayoutManager.HORIZONTAL}"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_forecast" />
-            </RelativeLayout>
-        </androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -127,7 +116,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:drawableEnd="@android:drawable/stat_notify_error"
                 android:paddingStart="12dp"
                 android:paddingTop="12dp"
                 android:paddingEnd="24dp"
@@ -135,8 +123,21 @@
                 android:text="@{viewState.shouldShowErrorMessage()?viewState.errorMessage:@string/unexpected_exception}"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
+                app:drawableEndCompat="@android:drawable/stat_notify_error"
                 tools:text="Status code : 500 Internal server error!" />
 
         </com.google.android.material.card.MaterialCardView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{viewState.isLoading()}" />
+
     </RelativeLayout>
 </layout>

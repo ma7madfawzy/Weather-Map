@@ -54,7 +54,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_gravity="center"
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:layout_width="170dp"
@@ -66,25 +67,27 @@
 
                 <TextView
                     android:id="@+id/textViewWeatherMain"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginStart="3dp"
+                    android:textAlignment="center"
+                    android:maxLines="2"
                     android:layout_marginEnd="3dp"
                     android:text="@{entity.name}"
                     android:textColor="@color/white"
-                    android:textSize="23sp"
+                    android:textSize="16sp"
                     tools:text="Clouds &amp; Sun" />
 
                 <ImageView
                     android:id="@+id/imageViewForecastIcon"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:layout_below="@id/textViewWeatherMain"
+                    android:layout_centerInParent="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="12dp"
                     android:transitionName="forecastIcon"
                     app:setWeatherIcon="@{entity.getCurrentWeather().icon}"
                     tools:src="@drawable/ic_splash_big_cloud" />
@@ -93,14 +96,14 @@
                     android:id="@+id/textViewTemp"
                     android:layout_width="match_parent"
                     android:textAlignment="center"
+                    android:layout_alignParentBottom="true"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/imageViewForecastIcon"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="4dp"
                     android:text="@{entity.main.getTempString()}"
                     android:textColor="@color/white"
-                    android:layout_marginBottom="4dp"
-                    android:textSize="26sp"
+                    android:layout_marginBottom="24dp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     android:transitionName="temp"
                     tools:text="18°" />

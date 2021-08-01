@@ -19,8 +19,7 @@ class WeatherDetailFragment : BaseVmFragment<WeatherDetailViewModel, FragmentWea
 
     override fun init() {
         super.init()
-        sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.slide_bottom)
+        sharedElementReturnTransition(android.R.transition.move)
 
         val args: WeatherDetailFragmentArgs by navArgs()
         viewModel.initWithArgs(args)

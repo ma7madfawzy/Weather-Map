@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="item"
+            type="com.app.weather.domain.model.ListItem" />
+
+        <variable
             name="viewModel"
             type="com.app.weather.presentation.dashboard.forecast.ForecastItemViewModel" />
     </data>

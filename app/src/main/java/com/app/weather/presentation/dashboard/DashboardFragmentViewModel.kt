@@ -4,7 +4,6 @@ import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.algolia.search.saas.AbstractQuery
-import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.data.db.entity.ForecastEntity
 import com.app.weather.domain.usecase.CurrentWeatherUseCase
 import com.app.weather.domain.usecase.DeletePinnedLocationUseCase
@@ -29,7 +28,6 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardFragmentViewModel @Inject internal constructor(
     private val forecastUseCase: ForecastUseCase,
-    private val currentWeatherUseCase: CurrentWeatherUseCase,
     private val insertPinnedLocationUseCase: InsertPinnedLocationUseCase,
     private val deletePinnedLocationUseCase: DeletePinnedLocationUseCase,
     private val networkAvailableCallback: BaseVmFragment.NetworkAvailableCallback
@@ -41,13 +39,10 @@ class DashboardFragmentViewModel @Inject internal constructor(
 
     val forecastViewState: MutableLiveData<BaseViewState<ForecastEntity>> = MutableLiveData()
 
-    val currentWeatherViewState: MutableLiveData<BaseViewState<CurrentWeatherEntity>> =
-        MutableLiveData()
 
     private fun updateForecastParams(params: CurrentWeatherUseCase.CurrentWeatherParams) {
         forecastParams = params
         viewModelScope.launch(Dispatchers.IO) {
-
             forecastUseCase(forecastParams).collect {
                 forecastViewState.postValue(map(it))
             }
@@ -59,15 +54,6 @@ class DashboardFragmentViewModel @Inject internal constructor(
         val mappedList = entity.data?.list?.let { ForecastMapper().mapFrom(it) }
         entity.data?.list = mappedList
         return entity
-    }
-
-    fun setCurrentWeatherParams(params: CurrentWeatherUseCase.CurrentWeatherParams) {
-        currentWeatherParams = params
-        viewModelScope.launch(Dispatchers.IO) {
-            currentWeatherUseCase(currentWeatherParams).collect {
-                currentWeatherViewState.postValue(it)
-            }
-        }
     }
 
     @ExperimentalCoroutinesApi
@@ -119,11 +105,11 @@ class DashboardFragmentViewModel @Inject internal constructor(
     }
 
     private fun updateWeatherParams(latLng: AbstractQuery.LatLng) {
-        setCurrentWeatherParams(
+        currentWeatherParams =
             CurrentWeatherUseCase.CurrentWeatherParams(
                 latLng.lat, latLng.lng,
                 networkAvailableCallback.isNetworkAvailable(), Constants.Coords.METRIC
             )
-        )
+
     }
 }
