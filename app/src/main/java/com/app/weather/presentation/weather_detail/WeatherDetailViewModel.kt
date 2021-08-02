@@ -38,7 +38,7 @@ class WeatherDetailViewModel @Inject constructor(
             forecastUseCase(
                 CurrentWeatherUseCase.CurrentWeatherParams(
                 args.forecastEntity.lat!!, args.forecastEntity.lng!!,
-                false, Constants.Coords.METRIC
+                false
             )).collect {
                 selectedDayForecastLiveData.postValue(it.data?.list?.filter { item ->
                     item.dtTxt?.substringBefore(" ") == selectedDayDate

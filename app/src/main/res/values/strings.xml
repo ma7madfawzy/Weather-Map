@@ -28,5 +28,7 @@
     <string name="location_settings">location_settings</string>
     <string name="gps">GPS</string>
     <string name="add_locations_to_home_screen">Add locations to Home Screen</string>
+    <string name="appwidget_text">Weather Now</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

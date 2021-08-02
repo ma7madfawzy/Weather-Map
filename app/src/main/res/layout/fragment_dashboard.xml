@@ -33,33 +33,15 @@
             android:layout_height="match_parent"
             app:visibility="@{!viewState.isLoading()}">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipToday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:checkable="false"
-                android:checked="true"
-                android:clickable="false"
-                android:text="@string/today"
-                android:textColor="@color/chipTextColor"
-                app:chipBackgroundColor="@color/chipItemBackgroundColor"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
                 android:id="@+id/pinLocationIV"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
                 android:layout_marginEnd="5dp"
                 android:onClick="@{v->viewModel.onPinLocationClicked()}"
                 android:src="@drawable/ic_pin"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chipToday"
+                app:layout_constraintTop_toTopOf="parent"
                 app:tint="@{viewModel.isPinned?@color/colorAccent:@color/mainTextColor}"
                 tools:src="@drawable/ic_pin" />
 

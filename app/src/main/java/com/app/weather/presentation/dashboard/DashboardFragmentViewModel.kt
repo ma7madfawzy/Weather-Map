@@ -99,7 +99,7 @@ class DashboardFragmentViewModel @Inject internal constructor(
         updateForecastParams(
             CurrentWeatherUseCase.CurrentWeatherParams(
                 latLng.lat, latLng.lng,
-                networkAvailableCallback.isNetworkAvailable(), Constants.Coords.METRIC
+                networkAvailableCallback.isNetworkAvailable()
             )
         )
     }
@@ -108,7 +108,7 @@ class DashboardFragmentViewModel @Inject internal constructor(
         currentWeatherParams =
             CurrentWeatherUseCase.CurrentWeatherParams(
                 latLng.lat, latLng.lng,
-                networkAvailableCallback.isNetworkAvailable(), Constants.Coords.METRIC
+                networkAvailableCallback.isNetworkAvailable()
             )
 
     }

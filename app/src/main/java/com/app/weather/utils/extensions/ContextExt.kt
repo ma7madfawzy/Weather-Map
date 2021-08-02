@@ -1,15 +1,15 @@
 package com.app.weather.utils.extensions
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import com.app.weather.presentation.core.Constants
+import com.app.weather.widget.WeatherAppWidget
 
 fun Context.getColorCompat(@ColorRes resourceId: Int) = ContextCompat.getColor(this, resourceId)
 fun Context.getDrawableCompat(res: Int): Drawable? = ContextCompat.getDrawable(this, res)
@@ -29,4 +29,20 @@ fun networkAvailable(context: Context): Boolean {
         else -> false
     }
 
+}
+
+fun Context.updateWidget() {
+    val widgetUpdateIntent = Intent(this, WeatherAppWidget::class.java).apply {
+        action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
+            AppWidgetManager.getInstance(this@updateWidget)
+                .getAppWidgetIds(
+                    ComponentName(
+                        this@updateWidget,
+                        WeatherAppWidget::class.java
+                    )
+                )
+        )
+    }
+    sendBroadcast(widgetUpdateIntent)
 }

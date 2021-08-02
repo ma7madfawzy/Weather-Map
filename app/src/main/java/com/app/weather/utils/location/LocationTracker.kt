@@ -1,4 +1,4 @@
-package com.app.weather.utils
+package com.app.weather.utils.location
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -14,6 +14,7 @@ import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.app.weather.R
+import com.app.weather.utils.UIUtils
 
 class LocationTracker : LocationListener {
     private var locationManager // Declaring a Location Manager

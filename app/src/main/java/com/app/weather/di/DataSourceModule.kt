@@ -1,6 +1,8 @@
 package com.app.weather.di
 
+import android.content.Context
 import com.app.weather.data.api.WeatherAppAPI
+import com.app.weather.data.datasource.currentLocation.CurrentLocationLocalDataSource
 import com.app.weather.data.datasource.currentWeather.CurrentWeatherLocalDataSource
 import com.app.weather.data.datasource.currentWeather.CurrentWeatherRemoteDataSource
 import com.app.weather.data.datasource.forecast.ForecastLocalDataSource
@@ -10,6 +12,7 @@ import com.app.weather.data.db.dao.ForecastDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -35,4 +38,9 @@ object DataSourceModule {
     @Singleton
     fun provideForecastLocalDataSource(forecastDao: ForecastDao) =
         ForecastLocalDataSource(forecastDao)
+
+    @Provides
+    @Singleton
+    fun provideCurrentLocationLocalDataSource(@ApplicationContext context: Context) =
+        CurrentLocationLocalDataSource(context)
 }

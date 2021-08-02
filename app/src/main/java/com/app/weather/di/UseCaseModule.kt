@@ -1,9 +1,6 @@
 package com.app.weather.di
 
-import com.app.weather.data.repositories.PinnedLocationsRepositoryImpl
-import com.app.weather.data.repositories.CurrentWeatherRepositoryImpl
-import com.app.weather.data.repositories.ForecastRepositoryImpl
-import com.app.weather.data.repositories.SearchCitiesRepositoryImpl
+import com.app.weather.data.repositories.*
 import com.app.weather.domain.usecase.*
 import dagger.Module
 import dagger.Provides
@@ -43,5 +40,14 @@ object UseCaseModule {
     @Singleton
     fun provideDeletePinnedLocationUseCase(currentLatLngRepositoryImpl: PinnedLocationsRepositoryImpl) =
         DeletePinnedLocationUseCase(currentLatLngRepositoryImpl)
+
+    @Provides
+    @Singleton
+    fun provideLoadLocationToPrefUseCase(repo: CurrentLocationRepositoryImpl) =
+        LoadCurrentLocationUseCase(repo)
+    @Provides
+    @Singleton
+    fun provideSaveLocationToPrefUseCase(repo: CurrentLocationRepositoryImpl) =
+        SaveCurrentLocationUseCase(repo)
 
 }

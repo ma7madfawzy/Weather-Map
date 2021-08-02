@@ -1,5 +1,6 @@
 package com.app.weather.di
 
+import com.app.weather.data.datasource.currentLocation.CurrentLocationLocalDataSource
 import com.app.weather.data.datasource.currentWeather.CurrentWeatherLocalDataSource
 import com.app.weather.data.datasource.currentWeather.CurrentWeatherRemoteDataSource
 import com.app.weather.data.datasource.forecast.ForecastLocalDataSource
@@ -7,10 +8,7 @@ import com.app.weather.data.datasource.forecast.ForecastRemoteDataSource
 import com.app.weather.data.datasource.pinned_locations.PinnedLocationsDataSource
 import com.app.weather.data.datasource.searchCities.SearchCitiesLocalDataSource
 import com.app.weather.data.datasource.searchCities.SearchCitiesRemoteDataSource
-import com.app.weather.data.repositories.PinnedLocationsRepositoryImpl
-import com.app.weather.data.repositories.CurrentWeatherRepositoryImpl
-import com.app.weather.data.repositories.ForecastRepositoryImpl
-import com.app.weather.data.repositories.SearchCitiesRepositoryImpl
+import com.app.weather.data.repositories.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +39,11 @@ object RepositoryModule {
         searchCitiesRemoteDataSource: SearchCitiesRemoteDataSource,
         searchCitiesLocalDataSource: SearchCitiesLocalDataSource,
     ) = SearchCitiesRepositoryImpl(searchCitiesRemoteDataSource, searchCitiesLocalDataSource)
+
+    @Provides
+    @Singleton
+    fun provideCurrentLocationLocalDataSource(dataSource: CurrentLocationLocalDataSource) =
+        CurrentLocationRepositoryImpl(dataSource)
 
     @Provides
     @Singleton

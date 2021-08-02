@@ -35,13 +35,11 @@
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:inputType="text"
                 app:defaultQueryHint="@string/start_typing"
                 app:searchViewEditHintColor="@{@android:color/darker_gray}"
                 app:searchViewEditTextColor="@{@color/mainTextColor}"
-                app:setIconifiedByDefault="@{false}"
+                app:setIconifiedByDefault="@{true}"
                 app:setIsSearchViewActivated="@{true}" />
 
         </com.google.android.material.card.MaterialCardView>

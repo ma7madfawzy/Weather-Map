@@ -1,5 +1,6 @@
 package com.app.weather.domain.usecase
 
+import com.algolia.search.saas.AbstractQuery
 import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.domain.repositories.CurrentWeatherRepository
 import com.app.weather.presentation.core.BaseViewState
@@ -32,7 +33,7 @@ class CurrentWeatherUseCase @Inject internal constructor(
     class CurrentWeatherParams(
         val lat: Double = 0.0,
         val lon: Double=0.0,
-        val fetchRequired: Boolean,
-        val units: String
+        val fetchRequired: Boolean=true,
+        val units: String=Constants.Coords.METRIC
     )
 }

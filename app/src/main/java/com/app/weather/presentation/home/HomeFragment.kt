@@ -8,26 +8,30 @@ import com.algolia.search.saas.AbstractQuery
 import com.app.weather.R
 import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.databinding.FragmentHomeBinding
-import com.app.weather.presentation.core.BaseVmRequireLocationFragment
+import com.app.weather.presentation.core.BaseVmFragment
 import com.app.weather.presentation.core.Constants
 import com.app.weather.presentation.home.pinned_locations.PinnedLocationsAdapter
 import com.app.weather.presentation.main.MainActivity
-import com.app.weather.utils.LocationTracker
 import com.app.weather.utils.extensions.observeWith
+import com.app.weather.utils.extensions.updateWidget
+import com.app.weather.utils.location.LocationPermissionHandler
+import com.app.weather.utils.location.LocationTracker
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, FragmentHomeBinding>(
+class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
     R.layout.fragment_home,
     HomeFragmentViewModel::class.java,
 ) {
+    private lateinit var permissionHandler: LocationPermissionHandler
     private lateinit var currentLocation: AbstractQuery.LatLng
 
     override fun init() {
         super.init()
-        initForecastAdapter()
         sharedElementReturnTransition(android.R.transition.slide_bottom)
+        initPermissionHandler()
+        initForecastAdapter()
         observeCurrentWeatherState()
         observePinnedLocationsState()
         setAddLocationsToHomeClickListener()
@@ -40,9 +44,17 @@ class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, Fragme
         getAdapter().clearData()
     }
 
-    override fun onLocationResult(obj: LocationTracker?, location: Location) {
+    private fun onLocationResult(obj: LocationTracker?, location: Location) {
         updateWeatherParam(AbstractQuery.LatLng(location.latitude, location.longitude))
-        stopReceivingUpdates()
+        permissionHandler.unsubscribe()
+    }
+
+    private fun initPermissionHandler() {
+        permissionHandler = LocationPermissionHandler(
+            this,
+            this::onLocationResult, this::onLocationError
+        )
+        permissionHandler.checkRequiredPermissions()
     }
 
     private fun observeCurrentWeatherState() {
@@ -50,9 +62,6 @@ class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, Fragme
             viewLifecycleOwner
         ) {
             (activity as MainActivity).setToolbarTitle(it.data?.name)
-            with(binding) {
-                containerForecast.entity = it.data
-            }
         }
     }
 
@@ -75,6 +84,7 @@ class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, Fragme
         binding.recyclerForecast.adapter = adapter
         handleEnterTransition()
     }
+
     private fun setAddLocationsToHomeClickListener() {
         binding.chipAdd.setOnClickListener {
             findNavController()
@@ -113,7 +123,7 @@ class HomeFragment : BaseVmRequireLocationFragment<HomeFragmentViewModel, Fragme
             )
     }
 
-    override fun onLocationError(obj: LocationTracker?, errorCode: Int, msg: String?) {
+    private fun onLocationError(obj: LocationTracker?, errorCode: Int, msg: String?) {
         setToLondon()
     }
 

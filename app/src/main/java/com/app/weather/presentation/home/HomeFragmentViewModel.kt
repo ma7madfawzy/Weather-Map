@@ -9,6 +9,7 @@ import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.data.db.entity.LocationEntity
 import com.app.weather.domain.usecase.CurrentWeatherUseCase
 import com.app.weather.domain.usecase.GetPinnedLocationsUseCase
+import com.app.weather.domain.usecase.SaveCurrentLocationUseCase
 import com.app.weather.presentation.core.BaseViewModel
 import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.BaseVmFragment
@@ -28,6 +29,7 @@ import javax.inject.Inject
 class HomeFragmentViewModel @Inject internal constructor(
     private val currentWeatherUseCase: CurrentWeatherUseCase,
     private val getPinnedLocationsUseCase: GetPinnedLocationsUseCase,
+    private val saveCurrentLocationUseCase: SaveCurrentLocationUseCase,
     private val networkAvailableCallback: BaseVmFragment.NetworkAvailableCallback
 ) : BaseViewModel() {
     var pinnedLocations: ObservableField<List<LocationEntity>> = ObservableField(emptyList())
@@ -47,11 +49,12 @@ class HomeFragmentViewModel @Inject internal constructor(
         }
     }
 
+
     fun requestPinnedLocations(clearOldData: Boolean) {
         clearOldLocationsData(clearOldData)
         viewModelScope.launch(Dispatchers.IO) {
             getPinnedLocationsUseCase().collect {
-                pinnedLocations .set(it)
+                pinnedLocations.set(it)
                 pinnedLocations.get()?.forEach { requestLocationEntityBasedWeather(it) }
             }
         }
@@ -80,16 +83,22 @@ class HomeFragmentViewModel @Inject internal constructor(
         }
     }
 
+    private fun saveCurrentLocationCoordinates(latLng: AbstractQuery.LatLng) =
+        viewModelScope.launch(Dispatchers.IO) {
+            saveCurrentLocationUseCase(latLng)
+        }
+
     fun updateWeatherParams(latLng: AbstractQuery.LatLng) {
-        val params=getWeatherParams(latLng)
+        val params = getWeatherParams(latLng)
         currentWeatherParams = params
+        saveCurrentLocationCoordinates(latLng)
         requestCurrentWeather()
-        logE("lat: for current ${latLng.lat} , long: ${latLng.lng}")
     }
+
 
     private fun getWeatherParams(latLng: AbstractQuery.LatLng) =
         CurrentWeatherUseCase.CurrentWeatherParams(
             latLng.lat, latLng.lng,
-            networkAvailableCallback.isNetworkAvailable(), Constants.Coords.METRIC
+            networkAvailableCallback.isNetworkAvailable()
         )
 }
