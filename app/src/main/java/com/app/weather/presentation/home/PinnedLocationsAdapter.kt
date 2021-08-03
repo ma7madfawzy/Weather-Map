@@ -1,4 +1,4 @@
-package com.app.weather.presentation.home.pinned_locations
+package com.app.weather.presentation.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -46,7 +46,7 @@ val diffCallback = object : DiffUtil.ItemCallback<CurrentWeatherEntity>() {
         oldItem: CurrentWeatherEntity,
         newItem: CurrentWeatherEntity
     ): Boolean =
-        oldItem == newItem
+        oldItem.lat == newItem.lat && oldItem.lng == newItem.lng
 
     override fun areItemsTheSame(
         oldItem: CurrentWeatherEntity,

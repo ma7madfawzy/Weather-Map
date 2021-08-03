@@ -10,7 +10,6 @@ import com.app.weather.data.db.entity.CurrentWeatherEntity
 import com.app.weather.databinding.FragmentHomeBinding
 import com.app.weather.presentation.core.BaseVmFragment
 import com.app.weather.presentation.core.Constants
-import com.app.weather.presentation.home.pinned_locations.PinnedLocationsAdapter
 import com.app.weather.presentation.main.MainActivity
 import com.app.weather.utils.extensions.observeWith
 import com.app.weather.utils.extensions.updateWidget

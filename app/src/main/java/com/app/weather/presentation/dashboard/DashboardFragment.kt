@@ -7,7 +7,6 @@ import com.app.weather.R
 import com.app.weather.databinding.FragmentDashboardBinding
 import com.app.weather.domain.model.ListItem
 import com.app.weather.presentation.core.BaseVmFragment
-import com.app.weather.presentation.dashboard.forecast.ForecastAdapter
 import com.app.weather.presentation.main.MainActivity
 import com.app.weather.utils.extensions.observeWith
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +34,6 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
         }
     }
 
-
     private fun observeForecastState() {
         viewModel.forecastViewState.observeWith(viewLifecycleOwner) {
             binding.viewState = it
@@ -49,7 +47,7 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
 
 
     private fun initForecastAdapter() {
-        val adapter = ForecastAdapter { navigateToDetails(it) }
+        val adapter = ForecastAdapter { it?.let { item -> navigateToDetails(item) } }
         binding.recyclerForecast.adapter = adapter
         handleEnterTransition()
     }

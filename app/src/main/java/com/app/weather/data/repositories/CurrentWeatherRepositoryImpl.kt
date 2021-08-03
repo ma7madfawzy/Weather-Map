@@ -25,16 +25,16 @@ class CurrentWeatherRepositoryImpl @Inject constructor(
     private val currentWeatherRateLimit = RateLimiter<String>(30, TimeUnit.SECONDS)
 
     override fun loadCurrentWeatherByGeoCords(
-        lat: Double, lng: Double, fetchRequired: Boolean, units: String
+        lat: Double, lon: Double, fetchRequired: Boolean, units: String
     ): StateFlow<Resource<CurrentWeatherEntity>> {
         return object :
             NetworkBoundResource<CurrentWeatherEntity, CurrentWeatherResponse>(
                 { fetchRequired },
-                loadFromDbFlow = { currentWeatherLocalDataSource.getCurrentWeather(lat,lng) },
+                loadFromDbFlow = { currentWeatherLocalDataSource.getCurrentWeather(lat,lon) },
                 fetchFromNetworkSingle = {
-                    currentWeatherRemoteDataSource.getCurrentWeatherByGeoCords(lat, lng, units)
+                    currentWeatherRemoteDataSource.getCurrentWeatherByGeoCords(lat, lon, units)
                 },
-                saveCallResult = { currentWeatherLocalDataSource.insertCurrentWeather(it,lat,lng) },
+                saveCallResult = { currentWeatherLocalDataSource.insertCurrentWeather(it,lat,lon) },
                 onFetchFailed = { currentWeatherRateLimit.reset(Constants.NetworkService.RATE_LIMITER_TYPE) }
             ) {}.asFlow
     }

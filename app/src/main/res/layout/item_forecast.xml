@@ -9,10 +9,7 @@
             name="item"
             type="com.app.weather.domain.model.ListItem" />
 
-        <variable
-            name="viewModel"
-            type="com.app.weather.presentation.dashboard.forecast.ForecastItemViewModel" />
-    </data>
+        </data>
 
     <RelativeLayout
         android:id="@+id/rootView"
@@ -26,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="-40dp"
             app:cornerRadius="40dp"
-            app:shadowColor="@{viewModel.item.getColor()}"
+            app:shadowColor="@{item.getColor()}"
             app:shadowDx="3"
             app:shadowDy="30"
             app:shadowMarginBottom="40dp"
@@ -48,7 +45,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="40dp"
-            android:backgroundTint="@{viewModel.item.getColor()}"
+            android:backgroundTint="@{item.getColor()}"
             android:clickable="true"
             android:focusable="true"
             android:transitionName="card"
@@ -74,7 +71,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="24dp"
-                    android:text="@{viewModel.item.getHourOfDay()}"
+                    android:text="@{item.getHourOfDay()}"
                     android:textColor="@color/white"
                     android:textSize="8sp"
                     android:textStyle="bold"
@@ -86,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/textViewTimeOfDay"
                     android:layout_centerHorizontal="true"
-                    android:text="@{viewModel.item.getDay()}"
+                    android:text="@{item.getDay()}"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -101,7 +98,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="12dp"
                     android:transitionName="forecastIcon"
-                    app:setWeatherIcon="@{viewModel.item.getWeatherItem().icon}"
+                    app:setWeatherIcon="@{item.getWeatherItem().icon}"
                     tools:src="@drawable/ic_splash_big_cloud" />
 
                 <TextView
@@ -111,7 +108,7 @@
                     android:layout_below="@id/imageViewForecastIcon"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="@{viewModel.item.main.getTempString()}"
+                    android:text="@{item.main.getTempString()}"
                     android:textColor="@color/white"
                     android:textSize="26sp"
                     android:textStyle="bold"
@@ -131,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="12dp"
-                        android:text="@{viewModel.item.main.getTempMinString()}"
+                        android:text="@{item.main.getTempMinString()}"
                         android:textColor="@color/whiteWithHalfOpacity"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -141,7 +138,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="@{viewModel.item.main.getTempMaxString()}"
+                        android:text="@{item.main.getTempMaxString()}"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"

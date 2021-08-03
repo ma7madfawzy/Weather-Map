@@ -13,8 +13,7 @@ import com.app.weather.domain.usecase.SaveCurrentLocationUseCase
 import com.app.weather.presentation.core.BaseViewModel
 import com.app.weather.presentation.core.BaseViewState
 import com.app.weather.presentation.core.BaseVmFragment
-import com.app.weather.presentation.core.Constants
-import com.app.weather.utils.extensions.logE
+import com.app.weather.utils.extensions.addItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -67,17 +66,13 @@ class HomeFragmentViewModel @Inject internal constructor(
 
 
     private fun requestLocationEntityBasedWeather(locationEntity: LocationEntity) {
-        logE("lat: for pinned ${locationEntity.lat}, long: ${locationEntity.lng}")
         viewModelScope.launch(Dispatchers.IO) {
             currentWeatherUseCase(getWeatherParams(locationEntity.latLang())).collect {
-                if (!it.isLoading()) {
-                    val oldWeatherEntityStateListData: ArrayList<CurrentWeatherEntity> = ArrayList(
-                        pinnedLocationsWeatherViewState.value ?: emptyList<CurrentWeatherEntity>()
-                    )
-                    it.data?.let { weatherEntity ->
-                        oldWeatherEntityStateListData.add(weatherEntity)
-                    }
-                    pinnedLocationsWeatherViewState.postValue(oldWeatherEntityStateListData)
+                it.data?.let { weatherEntity ->
+                    pinnedLocationsWeatherViewState.postValue(
+                            ArrayList(pinnedLocationsWeatherViewState.value ?: emptyList())
+                                .addItem(weatherEntity)
+                        )
                 }
             }
         }
