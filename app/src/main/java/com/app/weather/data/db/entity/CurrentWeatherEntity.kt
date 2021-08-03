@@ -81,16 +81,16 @@ data class CurrentWeatherEntity(
             DayOfWeek.MONDAY
         }
     }
-
+    //returns color based on temp
     fun getColor(): Int {
-        return when (dt?.let { getDateTime(it) }) {
-            DayOfWeek.MONDAY -> Color.parseColor("#28E0AE")
-            DayOfWeek.TUESDAY -> Color.parseColor("#FF0090")
-            DayOfWeek.WEDNESDAY -> Color.parseColor("#FFAE00")
-            DayOfWeek.THURSDAY -> Color.parseColor("#0090FF")
-            DayOfWeek.FRIDAY -> Color.parseColor("#DC0000")
-            DayOfWeek.SATURDAY -> Color.parseColor("#0051FF")
-            DayOfWeek.SUNDAY -> Color.parseColor("#3D28E0")
+        return when (main?.temp?.toInt()) {
+            in -10..0-> Color.parseColor("#28E0AE")
+            in 1..8-> Color.parseColor("#FF0090")
+            in -9..15 -> Color.parseColor("#0090FF")
+            in -16..20 -> Color.parseColor("#0051FF")
+            in -21..29 -> Color.parseColor("#3D28E0")
+            in -30..35 -> Color.parseColor("#FFAE00")
+            in -36..42 -> Color.parseColor("#DC0000")
             else -> Color.parseColor("#28E0AE")
         }
     }

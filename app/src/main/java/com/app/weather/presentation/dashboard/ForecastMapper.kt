@@ -1,15 +1,14 @@
 package com.app.weather.presentation.dashboard
 
 import com.app.weather.domain.model.ListItem
-import com.app.weather.utils.Mapper
 import javax.inject.Inject
 
 /**
  * Created by Fawzy
  */
 
-class ForecastMapper @Inject constructor() : Mapper<List<ListItem>, List<ListItem>> {
-    override fun mapFrom(type: List<ListItem>): List<ListItem> {
+class ForecastMapper @Inject constructor() {
+    fun mapFrom(type: List<ListItem>): List<ListItem> {
         val days = arrayListOf<String>()
         val mappedArray = arrayListOf<ListItem>()
 

@@ -9,7 +9,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import com.app.weather.widget.WeatherAppWidget
+import com.app.weather.widget.WeatherWidgetProvider
 
 fun Context.getColorCompat(@ColorRes resourceId: Int) = ContextCompat.getColor(this, resourceId)
 fun Context.getDrawableCompat(res: Int): Drawable? = ContextCompat.getDrawable(this, res)
@@ -32,16 +32,11 @@ fun networkAvailable(context: Context): Boolean {
 }
 
 fun Context.updateWidget() {
-    val widgetUpdateIntent = Intent(this, WeatherAppWidget::class.java).apply {
+    val widgetUpdateIntent = Intent(this, WeatherWidgetProvider::class.java).apply {
         action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
             AppWidgetManager.getInstance(this@updateWidget)
-                .getAppWidgetIds(
-                    ComponentName(
-                        this@updateWidget,
-                        WeatherAppWidget::class.java
-                    )
-                )
+                .getAppWidgetIds(ComponentName(this@updateWidget, WeatherWidgetProvider::class.java))
         )
     }
     sendBroadcast(widgetUpdateIntent)

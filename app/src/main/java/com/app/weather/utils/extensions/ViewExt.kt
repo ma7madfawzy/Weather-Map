@@ -1,6 +1,5 @@
 package com.app.weather.utils.extensions
 
-import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +10,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.textfield.TextInputLayout
+
 
 fun ViewGroup.inflate(@LayoutRes resourceId: Int) =
     LayoutInflater.from(context).inflate(
@@ -57,17 +58,16 @@ fun View.show() {
     visibility = VISIBLE
 }
 
-fun View.showKeyboard(activity: Context) {
+fun View.showKeyboard() {
     val inputManager: InputMethodManager =
-        activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 }
 
-fun View.hideKeyboard(activity: Activity) {
-    val view = activity.findViewById<View>(android.R.id.content)
+fun View.hideKeyboard() {
     val inputManager: InputMethodManager =
-        activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
 inline fun SearchView.queryTextListener(
@@ -77,17 +77,23 @@ inline fun SearchView.queryTextListener(
     setOnQueryTextListener(
         object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(newText: String): Boolean {
-                if (newText.isNotEmpty() && newText.count() > 2) {
+                if (newText.isNotEmpty() && newText.count() > 1) {
                     onQueryTextSubmit.invoke(newText)
                 }
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText?.isNotEmpty() == true && newText.count() > 2) {
+                if (newText?.isNotEmpty() == true && newText.count() > 1) {
                     onQueryTextChange.invoke(newText)
                 }
                 return true
             }
         })
 }
+
+ fun SearchView.showKeyboardOnFocusChanged(){
+    setOnQueryTextFocusChangeListener { v, hasFocus ->
+        if (hasFocus) v.showKeyboard()
+    }
+ }

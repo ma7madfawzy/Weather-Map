@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewState"
+            type="com.app.weather.presentation.core.BaseViewState" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/holo_red_light"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="16dp"
+        app:strokeColor="@android:color/holo_red_dark"
+        app:strokeWidth="2dp"
+        app:visibility="@{viewState.shouldShowErrorMessage()}">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:paddingStart="12dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="12dp"
+            android:text="@{viewState.shouldShowErrorMessage()?viewState.errorMessage:@string/unexpected_exception}"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:drawableEndCompat="@android:drawable/stat_notify_error"
+            tools:text="Status code : 500 Internal server error!" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

@@ -19,9 +19,9 @@
         android:fitsSystemWindows="true"
         app:cardCornerRadius="24dp"
         android:transitionName="card"
+        tools:backgroundTint="@android:color/holo_orange_dark"
         app:cardElevation="4dp"
-        tools:showIn="@layout/fragment_home"
-        tools:visibility="invisible">
+        tools:showIn="@layout/fragment_home">
 
         <RelativeLayout
             android:id="@+id/rootView"

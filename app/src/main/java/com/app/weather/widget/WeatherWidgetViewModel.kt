@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class WeatherAppWidgetViewModel @Inject constructor(
+class WeatherWidgetViewModel @Inject constructor(
     private val loadCurrentLocationUseCase: LoadCurrentLocationUseCase,
     private val currentWeatherUseCase: CurrentWeatherUseCase
 ) {

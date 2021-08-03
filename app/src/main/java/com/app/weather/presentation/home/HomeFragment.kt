@@ -51,24 +51,20 @@ class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
 
     private fun initPermissionHandler() {
         permissionHandler = LocationPermissionHandler(
-            this,
-            this::onLocationResult, this::onLocationError
+            this, this::onLocationResult, this::onLocationError
         )
         permissionHandler.checkRequiredPermissions()
     }
 
     private fun observeCurrentWeatherState() {
-        viewModel.currentWeatherViewState.observeWith(
-            viewLifecycleOwner
-        ) {
+        viewModel.currentWeatherViewState.observeWith(viewLifecycleOwner) {
             (activity as MainActivity).setToolbarTitle(it.data?.name)
+            if (it.isSuccess()) requireContext().updateWidget()
         }
     }
 
     private fun observePinnedLocationsState() {
-        viewModel.pinnedLocationsWeatherViewState.observeWith(
-            viewLifecycleOwner
-        ) {
+        viewModel.pinnedLocationsWeatherViewState.observeWith(viewLifecycleOwner) {
             it?.let { list -> updateAdapter(list) }
         }
     }
@@ -76,8 +72,7 @@ class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
     private fun initForecastAdapter() {
         val adapter = PinnedLocationsAdapter { item, card, temp ->
             navigateToDashboard(
-                true, item.lat!!,
-                item.lng!!,
+                true, item.lat!!, item.lng!!,
                 getWeatherDetailsSharedElementsExtras(card, temp)
             )
         }
@@ -87,8 +82,7 @@ class HomeFragment : BaseVmFragment<HomeFragmentViewModel, FragmentHomeBinding>(
 
     private fun setAddLocationsToHomeClickListener() {
         binding.chipAdd.setOnClickListener {
-            findNavController()
-                .navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
         }
     }
 

@@ -25,8 +25,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="170dp"
@@ -70,6 +69,7 @@
                 android:layout_width="124dp"
                 android:layout_height="124dp"
                 android:layout_marginStart="36dp"
+                android:layout_below="@id/textViewDayOfWeek"
                 android:layout_marginTop="48dp"
                 app:setWeatherIcon="@{item.getWeatherItem().icon}"
                 tools:src="@drawable/a10d_svg" />
@@ -79,6 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_below="@id/textViewDayOfWeek"
                 android:layout_marginTop="48dp"
                 android:transitionName="temp"
                 android:layout_marginEnd="36dp"
@@ -93,7 +94,7 @@
                 android:layout_below="@id/textViewTemperature"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:transitionName="tempMaxMin">
 
                 <TextView
@@ -102,7 +103,7 @@
                     android:layout_marginEnd="12dp"
                     android:text="@{item.main.getTempMinString()}"
                     android:textColor="@color/whiteWithHalfOpacity"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:text="39°" />
 
@@ -112,7 +113,7 @@
                     android:layout_marginStart="12dp"
                     android:text="@{item.main.getTempMaxString()}"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:text="22°" />
             </LinearLayout>

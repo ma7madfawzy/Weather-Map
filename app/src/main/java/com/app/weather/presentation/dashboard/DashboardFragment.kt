@@ -30,10 +30,8 @@ class DashboardFragment : BaseVmFragment<DashboardFragmentViewModel, FragmentDas
     }
 
     private fun initCardClickListener() {
-        binding.container.cardView.setOnClickListener {
-            navigateToDetails(
-                viewModel.forecastViewState.value?.data?.list?.get(0)!!
-            )
+        binding.container.cardView.setOnClickListener { _ ->
+            viewModel.forecastViewState.value?.data?.list?.get(0)?.let { navigateToDetails(it) }
         }
     }
 

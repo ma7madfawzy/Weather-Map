@@ -1,6 +1,5 @@
 package com.app.weather.presentation.core
 
-import android.app.Activity
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -16,7 +15,7 @@ import com.app.weather.R
 import com.app.weather.utils.extensions.hide
 import com.app.weather.utils.extensions.hideKeyboard
 import com.app.weather.utils.extensions.show
-import com.app.weather.utils.extensions.showKeyboard
+import com.app.weather.utils.extensions.showKeyboardOnFocusChanged
 import com.squareup.picasso.Picasso
 
 /**
@@ -103,6 +102,11 @@ fun setIsSearchViewActivated(view: SearchView, value: Boolean) {
     view.isActivated = value
 }
 
+@BindingAdapter("showKeyboard")
+fun showKeyboard(view: SearchView, show: Boolean) {
+    if (show) view.showKeyboardOnFocusChanged()
+    else view.hideKeyboard()
+}
 /**
  * App Use Cases
  * which changes from one app to another based on logic but the above serve general purpose

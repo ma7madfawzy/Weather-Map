@@ -14,7 +14,8 @@ import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.app.weather.R
-import com.app.weather.utils.UIUtils
+import com.app.weather.utils.extensions.addOnActivityDestroyed
+import com.app.weather.utils.extensions.addOnFragmentDestroyedObserver
 
 class LocationTracker : LocationListener {
     private var locationManager // Declaring a Location Manager
@@ -30,14 +31,14 @@ class LocationTracker : LocationListener {
         locationManager =
             fragment.requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         mListener = callback
-        UIUtils.createInstance().addOnFragmentDestroyedObserver(fragment) { destroy() }
+        fragment.addOnFragmentDestroyedObserver { destroy() }
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     constructor(activity: Activity, callback: Listener?) {
         locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         mListener = callback
-        UIUtils.createInstance().addOnActivityDestroyed(activity) { destroy() }
+        activity.addOnActivityDestroyed{ destroy() }
     }
 
     //----------------------------------------------------------------------------------------------

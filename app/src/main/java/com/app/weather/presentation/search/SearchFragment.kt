@@ -50,8 +50,7 @@ class SearchFragment : BaseVmFragment<SearchViewModel, FragmentSearchBinding>(
     private fun initSearchResultsAdapter() {
         val adapter = SearchResultAdapter { item ->
             item.coord?.let {
-                binding.searchView.hideKeyboard((activity as MainActivity))
-                logE("lat: onclick ${it.lat}, long ${it.lon}")
+                binding.searchView.hideKeyboard()
                 findNavController()
                     .navigate(SearchFragmentDirections.actionSearchFragmentToDashboardFragment
                         (false,it.lat?:0.0,it.lon?:0.0))
